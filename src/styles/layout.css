@@ -1,0 +1,132 @@
+.app-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 12% 8%,
+      var(--bg-surface) 0%,
+      var(--bg-base) 48%,
+      var(--bg-base) 100%
+    ),
+    var(--bg-base);
+  color: var(--text-primary);
+}
+
+.page-wrap,
+.page-wrap--landing {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.page-card {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  margin: 0;
+  min-height: calc(100vh - 84px);
+  padding: clamp(1.2rem, 3vw, 2rem) 0 clamp(2rem, 4vw, 2.8rem);
+  background:
+    radial-gradient(
+      circle at 14% 12%,
+      var(--bg-surface) 0%,
+      var(--bg-base) 48%,
+      var(--bg-base) 100%
+    ),
+    var(--bg-base);
+  overflow: hidden;
+}
+
+.page-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--accent) 9%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--accent) 9%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 22px 22px;
+  mask-image: radial-gradient(circle at center, black 36%, transparent 88%);
+  z-index: 0;
+}
+
+.page-card::after {
+  content: "";
+  position: absolute;
+  width: 42rem;
+  height: 42rem;
+  border-radius: 50%;
+  filter: blur(86px);
+  background: var(--accent);
+  opacity: 0.14;
+  top: -16rem;
+  right: -10rem;
+  animation: drift 14s ease-in-out infinite;
+  z-index: 0;
+}
+
+.page-card > * {
+  position: relative;
+  z-index: 1;
+  width: min(1120px, calc(100% - 2.5rem));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  line-height: 1.1;
+  color: var(--text-primary);
+}
+
+.page-header p {
+  margin: 0.65rem 0 0;
+  color: var(--text-muted);
+  max-width: 70ch;
+}
+
+.grid-two {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.info-box {
+  border: 1px solid var(--accent-soft);
+  border-radius: var(--radius-md);
+  padding: 0.9rem;
+  background: rgba(2, 6, 23, 0.58);
+}
+
+.info-box h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+}
+
+.info-box p {
+  margin: 0.55rem 0 0;
+  color: var(--text-muted);
+}
+
+.body-text {
+  margin-top: 1rem;
+  color: var(--text-muted);
+}
+
+.feature-list {
+  margin-top: 1rem;
+  padding-left: 1.2rem;
+  color: var(--text-muted);
+}
+
+.feature-list li + li {
+  margin-top: 0.45rem;
+}

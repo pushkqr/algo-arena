@@ -1,0 +1,99 @@
+.top-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  background: var(--bg-surface-3);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-soft);
+}
+
+.app-shell--landing .top-nav {
+  background: rgba(2, 6, 23, 0.45);
+  border-bottom-color: rgba(56, 189, 248, 0.14);
+  box-shadow: 0 8px 20px rgba(2, 6, 23, 0.28);
+}
+
+.app-shell:not(.app-shell--landing) .top-nav {
+  background: var(--bg-surface-strong);
+  border-bottom-color: var(--panel-border);
+  box-shadow: 0 12px 28px rgba(2, 6, 23, 0.5);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.brand:visited,
+.brand:hover,
+.brand:active {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.brand-logo {
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+  border-radius: 0.35rem;
+}
+
+.nav-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  list-style: none;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-list a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.nav-list a:visited {
+  color: var(--text-secondary);
+}
+
+.nav-list a:hover {
+  background: color-mix(in srgb, var(--accent-strong) 16%, transparent);
+  color: #e0f2fe;
+}
+
+.nav-list a.active {
+  background: color-mix(in srgb, var(--accent-strong) 28%, transparent);
+  color: #e0f2fe;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.link-button {
+  border: 0;
+  background: var(--accent-strong);
+  color: var(--text-dark-accent);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.65rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  opacity: 0.95;
+}

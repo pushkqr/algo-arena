@@ -1,4 +1,5 @@
 import PageShell from "../components/PageShell";
+import { EmptyState } from "../components/AsyncState";
 
 function Profile() {
   return (
@@ -6,10 +7,10 @@ function Profile() {
       title="Profile"
       subtitle="Account details, token/session info, and role visibility settings."
     >
-      <p className="body-text">
-        Profile scaffold ready. Next: show Firebase user info + service-role
-        claims.
-      </p>
+      <EmptyState
+        title="Profile details not loaded"
+        message="Connect Firebase user metadata and role claims to populate this view."
+      />
     </PageShell>
   );
 }

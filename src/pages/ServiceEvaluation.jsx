@@ -1,4 +1,5 @@
 import PageShell from "../components/PageShell";
+import { EmptyState } from "../components/AsyncState";
 
 function ServiceEvaluation() {
   return (
@@ -6,10 +7,10 @@ function ServiceEvaluation() {
       title="Service Evaluations"
       subtitle="Trigger evaluation runs and monitor asynchronous execution status."
     >
-      <p className="body-text">
-        Optional service-only view shell ready. Next: add role gate + run
-        controls.
-      </p>
+      <EmptyState
+        title="No service jobs yet"
+        message="Connect service evaluation actions and job-status polling to enable this panel."
+      />
     </PageShell>
   );
 }

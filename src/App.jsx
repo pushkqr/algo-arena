@@ -2,6 +2,8 @@ import { Suspense, lazy } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
+import AppErrorBoundary from "./components/AppErrorBoundary";
+import { LoadingState } from "./components/AsyncState";
 import RequireAuth from "./components/RequireAuth";
 import RequireServiceUser from "./components/RequireServiceUser";
 import { ROUTES } from "./lib/routes";
@@ -28,86 +30,90 @@ function App() {
       <main
         className={`page-wrap${isLandingRoute ? " page-wrap--landing" : ""}`}
       >
-        <Suspense fallback={<p className="body-text">Loading page...</p>}>
-          <Routes>
-            <Route path={ROUTES.home} element={<Landing />} />
-            <Route path={ROUTES.about} element={<About />} />
-            <Route path={ROUTES.tech} element={<Tech />} />
-            <Route path={ROUTES.login} element={<SignIn />} />
-            <Route
-              path={ROUTES.signin}
-              element={<Navigate to={ROUTES.login} replace />}
-            />
+        <AppErrorBoundary>
+          <Suspense
+            fallback={<LoadingState message="Loading page..." compact />}
+          >
+            <Routes>
+              <Route path={ROUTES.home} element={<Landing />} />
+              <Route path={ROUTES.about} element={<About />} />
+              <Route path={ROUTES.tech} element={<Tech />} />
+              <Route path={ROUTES.login} element={<SignIn />} />
+              <Route
+                path={ROUTES.signin}
+                element={<Navigate to={ROUTES.login} replace />}
+              />
 
-            <Route
-              path={ROUTES.app.strategies}
-              element={
-                <RequireAuth>
-                  <Strategies />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path={ROUTES.app.newStrategy}
-              element={
-                <RequireAuth>
-                  <StrategyEditor />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path={ROUTES.app.strategyById()}
-              element={
-                <RequireAuth>
-                  <StrategyEditor />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path={ROUTES.app.results}
-              element={
-                <RequireAuth>
-                  <MyResults />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path={ROUTES.app.resultById()}
-              element={
-                <RequireAuth>
-                  <ResultsDetail />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path={ROUTES.app.leaderboard}
-              element={
-                <RequireAuth>
-                  <Leaderboard />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path={ROUTES.app.profile}
-              element={
-                <RequireAuth>
-                  <Profile />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path={ROUTES.app.serviceEvaluations}
-              element={
-                <RequireAuth>
-                  <RequireServiceUser>
-                    <ServiceEvaluation />
-                  </RequireServiceUser>
-                </RequireAuth>
-              }
-            />
-            <Route path="*" element={<Navigate to={ROUTES.home} replace />} />
-          </Routes>
-        </Suspense>
+              <Route
+                path={ROUTES.app.strategies}
+                element={
+                  <RequireAuth>
+                    <Strategies />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path={ROUTES.app.newStrategy}
+                element={
+                  <RequireAuth>
+                    <StrategyEditor />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path={ROUTES.app.strategyById()}
+                element={
+                  <RequireAuth>
+                    <StrategyEditor />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path={ROUTES.app.results}
+                element={
+                  <RequireAuth>
+                    <MyResults />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path={ROUTES.app.resultById()}
+                element={
+                  <RequireAuth>
+                    <ResultsDetail />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path={ROUTES.app.leaderboard}
+                element={
+                  <RequireAuth>
+                    <Leaderboard />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path={ROUTES.app.profile}
+                element={
+                  <RequireAuth>
+                    <Profile />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path={ROUTES.app.serviceEvaluations}
+                element={
+                  <RequireAuth>
+                    <RequireServiceUser>
+                      <ServiceEvaluation />
+                    </RequireServiceUser>
+                  </RequireAuth>
+                }
+              />
+              <Route path="*" element={<Navigate to={ROUTES.home} replace />} />
+            </Routes>
+          </Suspense>
+        </AppErrorBoundary>
       </main>
     </div>
   );

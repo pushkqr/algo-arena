@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { EmptyState } from "../components/AsyncState";
 import PageShell from "../components/PageShell";
 
 function ResultsDetail() {
@@ -9,10 +10,10 @@ function ResultsDetail() {
       title="Evaluation Results"
       subtitle={`Aggregated metrics for evaluation ${evaluationId}.`}
     >
-      <p className="body-text">
-        Detail scaffold ready. Next: wire GET
-        /api/results/evaluations/:evaluationId/results.
-      </p>
+      <EmptyState
+        title="Evaluation results unavailable"
+        message={`Connect the results endpoint to load metrics for evaluation ${evaluationId}.`}
+      />
     </PageShell>
   );
 }

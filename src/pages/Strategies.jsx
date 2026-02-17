@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { EmptyState, ErrorState, LoadingState } from "../components/AsyncState";
 import PageShell from "../components/PageShell";
 import { strategiesApi } from "../api/strategiesApi";
 import { ApiClientError } from "../lib/apiClient";
@@ -178,12 +179,24 @@ function Strategies() {
         </button>
       </div>
 
-      {error && <p className="auth-error">{error}</p>}
+      {error ? (
+        <ErrorState
+          title="Unable to load strategies"
+          message={error}
+          actionLabel="Try Again"
+          onAction={fetchStrategies}
+          compact
+        />
+      ) : null}
 
       {loading ? (
-        <p className="body-text">Loading strategies...</p>
+        <LoadingState message="Loading strategies..." compact />
       ) : strategies.length === 0 ? (
-        <p className="body-text">No strategies found for this filter.</p>
+        <EmptyState
+          title="No strategies found"
+          message="No strategies match this filter. Try changing environment or status."
+          compact
+        />
       ) : (
         <div className="table-wrap">
           <table className="strategy-table">

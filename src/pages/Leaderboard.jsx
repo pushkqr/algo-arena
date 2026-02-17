@@ -1,4 +1,5 @@
 import PageShell from "../components/PageShell";
+import { EmptyState } from "../components/AsyncState";
 
 function Leaderboard() {
   return (
@@ -6,9 +7,10 @@ function Leaderboard() {
       title="Leaderboard"
       subtitle="See ranked aggregate performance across strategies for an environment and evaluation."
     >
-      <p className="body-text">
-        UI shell ready. Next: fetch and render ranked leaderboard rows.
-      </p>
+      <EmptyState
+        title="Leaderboard data pending"
+        message="Wire leaderboard endpoints to populate ranked strategy performance."
+      />
     </PageShell>
   );
 }

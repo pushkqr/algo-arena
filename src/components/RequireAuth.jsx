@@ -1,4 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
+import { LoadingState } from "./AsyncState";
 import useAuthState from "../hooks/useAuthState";
 import { ROUTES } from "../lib/routes";
 
@@ -7,7 +8,7 @@ function RequireAuth({ children }) {
   const { loading, isAuthenticated } = useAuthState();
 
   if (loading) {
-    return <p className="body-text">Checking authentication...</p>;
+    return <LoadingState message="Checking authentication..." compact />;
   }
 
   if (!isAuthenticated) {

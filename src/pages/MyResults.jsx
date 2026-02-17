@@ -1,4 +1,5 @@
 import PageShell from "../components/PageShell";
+import { EmptyState } from "../components/AsyncState";
 
 function MyResults() {
   return (
@@ -6,9 +7,10 @@ function MyResults() {
       title="My Results"
       subtitle="Inspect your aggregate results for a selected evaluation run."
     >
-      <p className="body-text">
-        UI shell ready. Next: add evaluation picker + results table.
-      </p>
+      <EmptyState
+        title="No evaluations loaded"
+        message="Connect the results API to show evaluation runs and aggregate metrics."
+      />
     </PageShell>
   );
 }

@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { LoadingState } from "../components/AsyncState";
 import PageShell from "../components/PageShell";
 import { strategiesApi } from "../api/strategiesApi";
 import { ApiClientError } from "../lib/apiClient";
@@ -168,7 +169,7 @@ function StrategyEditor() {
       subtitle="Code editor + metadata form for strategy source and configuration."
     >
       {loading ? (
-        <p className="body-text">Loading strategy...</p>
+        <LoadingState message="Loading strategy..." compact />
       ) : (
         <form className="strategy-form" onSubmit={handleSubmit}>
           <div className="form-grid">
@@ -194,7 +195,7 @@ function StrategyEditor() {
             <label htmlFor="strategySource">Source Code</label>
             <div className="code-editor-shell" id="strategySource">
               <Suspense
-                fallback={<p className="body-text">Loading editor...</p>}
+                fallback={<LoadingState message="Loading editor..." compact />}
               >
                 <MonacoEditor
                   height="360px"

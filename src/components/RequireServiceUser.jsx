@@ -1,4 +1,5 @@
 import { Navigate } from "react-router-dom";
+import { LoadingState } from "./AsyncState";
 import useAuthState from "../hooks/useAuthState";
 import { ROUTES } from "../lib/routes";
 
@@ -6,7 +7,7 @@ function RequireServiceUser({ children }) {
   const { loading, isService } = useAuthState();
 
   if (loading) {
-    return <p className="body-text">Checking user permissions...</p>;
+    return <LoadingState message="Checking user permissions..." compact />;
   }
 
   if (!isService) {
