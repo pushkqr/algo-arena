@@ -10,8 +10,7 @@ export const ROUTES = {
     strategyById: (strategyId = ":strategyId") =>
       `/app/strategies/${strategyId}`,
     results: "/app/results",
-    resultById: (evaluationId = ":evaluationId") =>
-      `/app/results/${evaluationId}`,
+    resultById: (resultId = ":resultId") => `/app/results/${resultId}`,
     leaderboard: "/app/leaderboard",
     profile: "/app/profile",
     serviceEvaluations: "/app/service/evaluations",
