@@ -3,6 +3,49 @@ const ROLE_KEY = "aa_is_service_user";
 const UID_KEY = "aa_uid";
 const EMAIL_KEY = "aa_email";
 
+function parseCsvList(value) {
+  return String(value || "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+const FRONTEND_SERVICE_UIDS = new Set(
+  parseCsvList(
+    import.meta.env.VITE_SERVICE_MANAGER_UIDS ||
+      import.meta.env.VITE_SERVICE_USER_IDS ||
+      import.meta.env.VITE_SERVICE_USER_ID,
+  ),
+);
+
+const FRONTEND_SERVICE_EMAILS = new Set(
+  parseCsvList(
+    import.meta.env.VITE_SERVICE_MANAGER_EMAILS ||
+      import.meta.env.VITE_SERVICE_USER_EMAILS ||
+      import.meta.env.VITE_SERVICE_USER_EMAIL,
+  ).map((email) => email.toLowerCase()),
+);
+
+function hasFrontendServiceAccess(user, claims) {
+  const uid = user?.uid || "";
+  const email = (user?.email || "").toLowerCase();
+
+  const isAllowlistedByIdentity =
+    (uid && FRONTEND_SERVICE_UIDS.has(uid)) ||
+    (email && FRONTEND_SERVICE_EMAILS.has(email));
+
+  if (isAllowlistedByIdentity) {
+    return true;
+  }
+
+  return Boolean(
+    claims?.isServiceUser ||
+    claims?.serviceUser ||
+    claims?.service ||
+    claims?.role === "service",
+  );
+}
+
 export function getToken() {
   return localStorage.getItem(TOKEN_KEY) || "";
 }
@@ -46,12 +89,7 @@ export async function syncSessionFromUser(user) {
   ]);
 
   const claims = tokenResult?.claims || {};
-  const hasServiceRole = Boolean(
-    claims?.isServiceUser ||
-    claims?.serviceUser ||
-    claims?.service ||
-    claims?.role === "service",
-  );
+  const hasServiceRole = hasFrontendServiceAccess(user, claims);
 
   setToken(token);
   setServiceUser(hasServiceRole);
