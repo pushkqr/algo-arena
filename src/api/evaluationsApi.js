@@ -18,6 +18,14 @@ export const evaluationsApi = {
     return apiClient.get(`${BASE_PATH}/${evaluationId}`);
   },
 
+  getEnvOptions(envName) {
+    return apiClient.get(`${BASE_PATH}/env-options`, {
+      query: {
+        envName,
+      },
+    });
+  },
+
   start({ envName, ...config } = {}) {
     return apiClient.post(BASE_PATH, config, {
       query: {

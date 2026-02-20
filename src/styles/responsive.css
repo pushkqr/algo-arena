@@ -68,4 +68,12 @@
   .stat-item:last-child {
     border-bottom: 0;
   }
+
+  .service-eval-actions {
+    width: 100%;
+  }
+
+  .service-eval-actions .secondary-btn {
+    flex: 1 1 100%;
+  }
 }

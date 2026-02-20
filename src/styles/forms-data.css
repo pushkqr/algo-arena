@@ -123,6 +123,41 @@
   gap: 0.75rem;
 }
 
+.service-eval-toolbar {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.service-eval-core-grid,
+.service-eval-advanced-grid {
+  margin-top: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  align-items: end;
+  gap: 0.75rem;
+}
+
+.service-eval-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.service-eval-primary-action {
+  border-color: color-mix(in srgb, var(--accent-strong) 45%, transparent);
+  color: #e0f2fe;
+}
+
+.service-eval-primary-action:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent-strong) 28%, transparent);
+}
+
+.service-eval-advanced {
+  display: grid;
+  gap: 0.75rem;
+}
+
 .toolbar-item {
   display: grid;
   gap: 0.35rem;
@@ -141,6 +176,14 @@
   min-width: 180px;
   background: var(--bg-surface-2);
   color: var(--text-primary);
+}
+
+.service-eval-core-grid .auth-input,
+.service-eval-core-grid .toolbar-item select,
+.service-eval-advanced-grid .auth-input,
+.service-eval-advanced-grid .toolbar-item select {
+  width: 100%;
+  min-width: 0;
 }
 
 .secondary-btn {

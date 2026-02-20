@@ -23,8 +23,6 @@ function ServiceEvaluation() {
   const {
     envName,
     setEnvName,
-    roundsInput,
-    setRoundsInput,
     poolSizeInput,
     setPoolSizeInput,
     poolCountInput,
@@ -39,11 +37,16 @@ function ServiceEvaluation() {
     listError,
     submitError,
     submitMessage,
+    envOptionParams,
+    envOptionValues,
+    loadingEnvOptions,
+    envOptionsError,
     selectedEvaluationId,
     selectedEvaluation,
     loadingDetail,
     detailError,
     detailRows,
+    handleEnvOptionChange,
     loadEvaluations,
     loadEvaluationDetail,
     handleInspectToggle,
@@ -76,8 +79,6 @@ function ServiceEvaluation() {
         envOptions={SERVICE_ENV_OPTIONS}
         envName={envName}
         onEnvNameChange={setEnvName}
-        roundsInput={roundsInput}
-        onRoundsChange={setRoundsInput}
         poolSizeInput={poolSizeInput}
         onPoolSizeChange={setPoolSizeInput}
         poolCountInput={poolCountInput}
@@ -88,9 +89,21 @@ function ServiceEvaluation() {
         onShuffleChange={setShuffleInput}
         submitting={submitting}
         onQueue={handleStartEvaluation}
+        envOptionParams={envOptionParams}
+        envOptionValues={envOptionValues}
+        onEnvOptionChange={handleEnvOptionChange}
+        loadingEnvOptions={loadingEnvOptions}
         loadingList={loadingList}
         onRefresh={loadEvaluations}
       />
+
+      {envOptionsError ? (
+        <ErrorState
+          title="Unable to load environment options"
+          message={envOptionsError}
+          compact
+        />
+      ) : null}
 
       {submitError ? (
         <ErrorState
