@@ -1,5 +1,7 @@
 import { Suspense, lazy } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import AppErrorBoundary from "./components/AppErrorBoundary";
@@ -115,6 +117,20 @@ function App() {
           </Suspense>
         </AppErrorBoundary>
       </main>
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        toastClassName="aa-toast"
+        bodyClassName="aa-toast-body"
+        progressClassName="aa-toast-progress"
+      />
     </div>
   );
 }

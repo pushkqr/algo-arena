@@ -263,6 +263,15 @@
   gap: 0.5rem;
 }
 
+.leaderboard-pager {
+  margin-top: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+
+.leaderboard-context {
+  margin: 0 0 0.45rem;
+}
+
 .strategy-form {
   margin-top: 1rem;
   display: grid;
@@ -328,6 +337,52 @@
   margin: 0.35rem 0 0;
   color: var(--text-muted);
   font-size: 0.85rem;
+}
+
+.aa-toast {
+  border: 1px solid var(--panel-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface-strong);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-soft);
+}
+
+.aa-toast-body {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.aa-toast-progress {
+  background: linear-gradient(
+    90deg,
+    var(--accent-strong) 0%,
+    var(--accent-cyan-soft) 100%
+  );
+}
+
+.Toastify__close-button {
+  color: var(--text-muted);
+  opacity: 0.85;
+}
+
+.Toastify__close-button:hover {
+  color: var(--text-secondary);
+}
+
+.Toastify__toast--success {
+  border-color: color-mix(
+    in srgb,
+    var(--success) 55%,
+    var(--panel-border-strong)
+  );
+}
+
+.Toastify__toast--error {
+  border-color: color-mix(
+    in srgb,
+    var(--danger) 55%,
+    var(--panel-border-strong)
+  );
 }
 
 .verify-list {

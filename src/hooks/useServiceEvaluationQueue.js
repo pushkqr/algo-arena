@@ -21,7 +21,6 @@ export default function useServiceEvaluationQueue({
   const navigate = useNavigate();
 
   const [envName, setEnvName] = useState(SERVICE_ENV_OPTIONS[0]);
-  const [roundsInput, setRoundsInput] = useState("12");
   const [poolSizeInput, setPoolSizeInput] = useState("4");
   const [poolCountInput, setPoolCountInput] = useState("2");
   const [episodesInput, setEpisodesInput] = useState("8");
@@ -110,7 +109,6 @@ export default function useServiceEvaluationQueue({
     try {
       const payload = await evaluationsApi.start({
         envName,
-        rounds: asPositiveInteger(roundsInput, 12),
         poolSize: asPositiveInteger(poolSizeInput, 4),
         poolCount: asPositiveInteger(poolCountInput, 2),
         episodesPerPool: asPositiveInteger(episodesInput, 8),
@@ -150,15 +148,12 @@ export default function useServiceEvaluationQueue({
     navigate,
     poolCountInput,
     poolSizeInput,
-    roundsInput,
     shuffleInput,
   ]);
 
   return {
     envName,
     setEnvName,
-    roundsInput,
-    setRoundsInput,
     poolSizeInput,
     setPoolSizeInput,
     poolCountInput,
