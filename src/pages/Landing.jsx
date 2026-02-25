@@ -29,16 +29,25 @@ function Landing() {
 
       <div className="landing-stats">
         <article className="stat-item">
-          <h3>Single Active Strategy</h3>
-          <p>One active strategy per user and environment.</p>
+          <h3>Active Strategy Management</h3>
+          <p>
+            Activate your best algorithm for each environment and refine it as
+            you learn.
+          </p>
         </article>
         <article className="stat-item">
-          <h3>Async Evaluations</h3>
-          <p>Runs are queued, processed, and ranked automatically.</p>
+          <h3>Automated, Fair Evaluations</h3>
+          <p>
+            Every submission is processed asynchronously, ensuring unbiased
+            ranking and feedback.
+          </p>
         </article>
         <article className="stat-item">
-          <h3>User-Scoped Results</h3>
-          <p>Users see and manage only their own strategies and outcomes.</p>
+          <h3>Personalized Results & Progress</h3>
+          <p>
+            Track your strategies, outcomes, and growth - your data is private
+            and under your control.
+          </p>
         </article>
       </div>
     </HeroShell>

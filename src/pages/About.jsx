@@ -14,9 +14,9 @@ function About() {
       </h1>
 
       <p className="landing-subtitle about-subtitle">
-        Algo Arena is a strategy iteration platform for writing, validating, and
-        evaluating algorithmic approaches in competitive environments. Move from
-        idea to data-backed outcome with a consistent workflow.
+        Algo Arena is a platform for iterating algorithmic strategies with
+        rigorous validation and measurable outcomes. Move from idea to
+        data-backed results using a repeatable, feedback-driven workflow.
       </p>
 
       <div className="landing-actions">
@@ -32,36 +32,53 @@ function About() {
         <article className="info-box">
           <h2>What You Can Do</h2>
           <ul className="feature-list">
-            <li>Create and manage strategies per environment</li>
-            <li>Validate source code against safety and contract rules</li>
-            <li>Activate one strategy at a time for fair comparisons</li>
-            <li>Track outcomes through results and leaderboard views</li>
+            <li>
+              Author strategies and run them in realistic, testable environments
+            </li>
+            <li>Validate code with built-in safety and contract checks</li>
+            <li>
+              Activate a single strategy to ensure fair, apples-to-apples
+              comparisons
+            </li>
+            <li>
+              Analyze results, trends, and leaderboards to guide iteration
+            </li>
+            <li>Share strategies and learn from community examples</li>
           </ul>
         </article>
 
         <article className="info-box">
-          <h2>MVP Scope</h2>
+          <h2>Vision & Goals</h2>
           <p>
-            The current MVP is focused on the AuctionHouse environment and core
-            strategy lifecycle. It prioritizes backend-compatible workflows,
-            reliable authentication, and a clean operator experience before
-            expanding to multi-environment coverage.
+            Our goal is to make strategy iteration intuitive, measurable, and
+            community-driven. We focus on reproducible evaluations, clear
+            feedback loops, and tools that accelerate learning and discovery
+            across environments.
           </p>
         </article>
       </div>
 
       <div className="landing-stats about-stats">
         <article className="stat-item">
-          <h3>Contract-Checked Code</h3>
-          <p>Verification enforces required reset, observe, and act flow.</p>
+          <h3>Verified by Contract Checks</h3>
+          <p>
+            Static and runtime checks enforce the expected strategy lifecycle
+            and guard rails.
+          </p>
         </article>
         <article className="stat-item">
-          <h3>Fair Strategy Activation</h3>
-          <p>One active strategy per user and environment at any time.</p>
+          <h3>Fair Activation</h3>
+          <p>
+            Single active strategy per environment preserves comparability and
+            fairness.
+          </p>
         </article>
         <article className="stat-item">
-          <h3>Async Evaluation Pipeline</h3>
-          <p>Runs are queued, processed, and surfaced through rankings.</p>
+          <h3>Scalable Evaluation Pipeline</h3>
+          <p>
+            Asynchronous runs, reproducible scoring, and dependable
+            leaderboards.
+          </p>
         </article>
       </div>
     </HeroShell>

@@ -14,9 +14,10 @@ function Tech() {
       </h1>
 
       <p className="landing-subtitle tech-subtitle">
-        Algo Arena uses a lightweight React frontend with Firebase auth,
-        centralized API access, and backend-compatible strategy workflows. The
-        stack is intentionally simple so product iteration stays fast.
+        Algo Arena combines a focused frontend with dependable backend
+        integrations to make iteration fast and observable. The stack is
+        intentionally pragmatic to prioritize reliability, reproducibility, and
+        developer velocity.
       </p>
 
       <div className="landing-actions">
@@ -32,36 +33,56 @@ function Tech() {
         <article className="info-box">
           <h2>Frontend Layer</h2>
           <ul className="feature-list">
-            <li>React + Vite for fast local iteration and builds</li>
-            <li>React Router for public, app, and protected routes</li>
-            <li>Shared visual system with reusable shell patterns</li>
-            <li>Monaco editor integration for strategy authoring UX</li>
+            <li>
+              React + Vite for fast local iteration and predictable bundles
+            </li>
+            <li>React Router for composable public and protected routes</li>
+            <li>Design system and shell components for consistent UX</li>
+            <li>
+              Monaco editor for an integrated strategy authoring experience
+            </li>
           </ul>
         </article>
 
         <article className="info-box">
           <h2>Backend Integration</h2>
           <ul className="feature-list">
-            <li>Firebase ID token flow for authenticated API requests</li>
-            <li>Centralized API client with uniform error handling</li>
-            <li>Strategy APIs for create, update, delete, and activation</li>
-            <li>Evaluation/result surfaces designed for async pipelines</li>
+            <li>Firebase Auth for secure identity and session management</li>
+            <li>
+              Centralized API client with consistent error and retry handling
+            </li>
+            <li>
+              Robust strategy APIs for lifecycle management and activation
+            </li>
+            <li>
+              Evaluation and results designed around asynchronous, reproducible
+              pipelines
+            </li>
           </ul>
         </article>
       </div>
 
       <div className="landing-stats tech-stats">
         <article className="stat-item">
-          <h3>Modular Verifier</h3>
-          <p>AST-based checks enforce strategy safety and contract rules.</p>
+          <h3>Verified Strategies</h3>
+          <p>
+            Pluggable AST checks and runtime assertions ensure strategies meet
+            safety and contract rules before execution.
+          </p>
         </article>
         <article className="stat-item">
-          <h3>Token-Aware Client</h3>
-          <p>Requests include session auth and normalize API failures.</p>
+          <h3>Resilient Client</h3>
+          <p>
+            Token-aware requests, consistent error handling, and retry logic
+            provide robust API interactions.
+          </p>
         </article>
         <article className="stat-item">
-          <h3>MVP-First Design</h3>
-          <p>Architecture favors velocity, clarity, and extensibility.</p>
+          <h3>Observability &amp; Extensibility</h3>
+          <p>
+            Structured logs, metrics-friendly events, and a modular design that
+            supports scaling, analytics, and future environments.
+          </p>
         </article>
       </div>
     </HeroShell>
