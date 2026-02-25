@@ -44,7 +44,12 @@ function Profile() {
         />
       ) : (
         <>
-          <ProfileSummary user={user} sessionUser={sessionUser} />
+          <ProfileSummary
+            user={user}
+            sessionUser={sessionUser}
+            isEditingName={isEditingName}
+            onCompleteUsernameSetup={handleStartEditName}
+          />
 
           <ProfileDetailsTable
             rows={rows}

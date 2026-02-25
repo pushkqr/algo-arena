@@ -1,56 +1,25 @@
-import { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import {
-  GoogleAuthProvider,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-} from "firebase/auth";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, hasFirebaseConfig } from "../lib/firebase";
 import useAuthState from "../hooks/useAuthState";
+import useAuthRedirect from "../hooks/useAuthRedirect";
 import HeroShell from "../components/HeroShell";
 import { ROUTES } from "../lib/routes";
 
 function SignIn() {
-  const location = useLocation();
-  const navigate = useNavigate();
   const { isAuthenticated } = useAuthState();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const nextPath = useMemo(
-    () => location.state?.from || ROUTES.app.strategies,
-    [location.state],
-  );
+  const { navigateToNextPath } = useAuthRedirect({
+    isAuthenticated,
+    loading,
+  });
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate(nextPath, { replace: true });
-    }
-  }, [isAuthenticated, navigate, nextPath]);
-
-  async function handleGoogleSignIn() {
-    if (!auth) {
-      setError("Firebase is not configured. Add VITE_FIREBASE_* values.");
-      return;
-    }
-
-    setError("");
-    setLoading(true);
-    try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      navigate(nextPath, { replace: true });
-    } catch (authError) {
-      setError(authError?.message || "Google sign-in failed.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function handleEmailAuth(mode) {
+  async function handleSignIn() {
     if (!auth) {
       setError("Firebase is not configured. Add VITE_FIREBASE_* values.");
       return;
@@ -64,14 +33,10 @@ function SignIn() {
     setError("");
     setLoading(true);
     try {
-      if (mode === "signup") {
-        await createUserWithEmailAndPassword(auth, email.trim(), password);
-      } else {
-        await signInWithEmailAndPassword(auth, email.trim(), password);
-      }
-      navigate(nextPath, { replace: true });
+      await signInWithEmailAndPassword(auth, email.trim(), password);
+      navigateToNextPath();
     } catch (authError) {
-      setError(authError?.message || "Email auth failed.");
+      setError(authError?.message || "Sign in failed.");
     } finally {
       setLoading(false);
     }
@@ -84,15 +49,15 @@ function SignIn() {
           <p className="landing-kicker">ACCOUNT ACCESS</p>
 
           <h1 className="landing-title signin-title">
-            Sign in.
+            Log in.
             <br />
-            <span>Continue building and evaluating.</span>
+            <span>Continue evaluating and iterating.</span>
           </h1>
         </div>
 
         <div className="signin-card">
           <p className="signin-helper">
-            Use Google or email/password to access your strategy workspace.
+            Use your account credentials to sign in.
           </p>
 
           {!hasFirebaseConfig && (
@@ -102,15 +67,6 @@ function SignIn() {
           )}
 
           <div className="auth-panel">
-            <button
-              disabled={loading || !hasFirebaseConfig}
-              onClick={handleGoogleSignIn}
-            >
-              {loading ? "Please wait..." : "Continue with Google"}
-            </button>
-
-            <div className="auth-divider">or</div>
-
             <label className="auth-label" htmlFor="email">
               Email
             </label>
@@ -140,17 +96,18 @@ function SignIn() {
             <div className="auth-actions">
               <button
                 disabled={loading || !hasFirebaseConfig}
-                onClick={() => handleEmailAuth("signin")}
+                onClick={handleSignIn}
               >
-                Sign In
-              </button>
-              <button
-                disabled={loading || !hasFirebaseConfig}
-                onClick={() => handleEmailAuth("signup")}
-              >
-                Create Account
+                {loading ? "Please wait..." : "Sign In"}
               </button>
             </div>
+
+            <p className="signin-switch-text">
+              Don&apos;t have an account?{" "}
+              <Link to={ROUTES.signup} className="signin-switch-link">
+                Sign up
+              </Link>
+            </p>
 
             {error && <p className="auth-error">{error}</p>}
           </div>

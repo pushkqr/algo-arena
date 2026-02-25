@@ -14,6 +14,7 @@ const Landing = lazy(() => import("./pages/Landing"));
 const About = lazy(() => import("./pages/About"));
 const Tech = lazy(() => import("./pages/Tech"));
 const SignIn = lazy(() => import("./pages/SignIn"));
+const SignUp = lazy(() => import("./pages/SignUp"));
 const Strategies = lazy(() => import("./pages/Strategies"));
 const StrategyEditor = lazy(() => import("./pages/StrategyEditor"));
 const MyResults = lazy(() => import("./pages/MyResults"));
@@ -41,6 +42,7 @@ function App() {
               <Route path={ROUTES.about} element={<About />} />
               <Route path={ROUTES.tech} element={<Tech />} />
               <Route path={ROUTES.login} element={<SignIn />} />
+              <Route path={ROUTES.signup} element={<SignUp />} />
               <Route
                 path={ROUTES.signin}
                 element={<Navigate to={ROUTES.login} replace />}

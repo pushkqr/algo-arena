@@ -3,6 +3,7 @@ export const ROUTES = {
   about: "/about",
   tech: "/tech",
   login: "/login",
+  signup: "/signup",
   signin: "/signin",
   app: {
     strategies: "/app/strategies",
