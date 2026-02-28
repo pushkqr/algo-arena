@@ -16,9 +16,12 @@ function useAuthState() {
     let active = true;
 
     if (!hasFirebaseConfig || !auth) {
-      setUser(null);
-      clearSession();
-      setLoading(false);
+      Promise.resolve().then(() => {
+        if (!active) return;
+        setUser(null);
+        clearSession();
+        setLoading(false);
+      });
       return () => {
         active = false;
       };

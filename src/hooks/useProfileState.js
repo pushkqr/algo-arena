@@ -2,11 +2,14 @@ import { useCallback, useMemo, useState } from "react";
 import { sendEmailVerification } from "firebase/auth";
 import { toast } from "react-toastify";
 import { usersApi } from "../api/usersApi";
+import { auth } from "../lib/firebase";
 import useCopyFeedback from "./useCopyFeedback";
 import useUsernameAvailability, {
   USERNAME_PATTERN,
   normalizeUsername,
 } from "./useUsernameAvailability";
+import { syncSessionFromUser } from "../lib/authSession";
+const LAST_CLAIMED_DISPLAYNAME_KEY = "aa_last_claimed_displayName";
 
 function formatDate(rawValue) {
   if (!rawValue) {
@@ -21,7 +24,7 @@ function formatDate(rawValue) {
   return date.toLocaleString();
 }
 
-function toRows({ user, sessionUser }) {
+function toRows({ user, sessionUser, displayNameOverride }) {
   return [
     {
       label: "UID",
@@ -35,7 +38,7 @@ function toRows({ user, sessionUser }) {
     },
     {
       label: "Display Name",
-      value: user?.displayName || "-",
+      value: displayNameOverride || user?.displayName || "-",
       copyable: false,
     },
     {
@@ -61,6 +64,13 @@ export default function useProfileState({ user, sessionUser }) {
   const [isEditingName, setIsEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState("");
   const [actionLoading, setActionLoading] = useState("");
+  const [displayNameOverride, setDisplayNameOverride] = useState(() => {
+    try {
+      return sessionStorage.getItem(LAST_CLAIMED_DISPLAYNAME_KEY) || "";
+    } catch {
+      return "";
+    }
+  });
 
   const checkUsernameAvailability = useCallback(
     (username) => usersApi.checkUsernameAvailability(username),
@@ -75,8 +85,8 @@ export default function useProfileState({ user, sessionUser }) {
   });
 
   const rows = useMemo(
-    () => toRows({ user, sessionUser }),
-    [user, sessionUser],
+    () => toRows({ user, sessionUser, displayNameOverride }),
+    [user, sessionUser, displayNameOverride],
   );
 
   function handleStartEditName() {
@@ -139,7 +149,34 @@ export default function useProfileState({ user, sessionUser }) {
 
       const result = await usersApi.updateMyUsername(normalizedCandidate);
 
-      await user.reload();
+      try {
+        sessionStorage.setItem(
+          LAST_CLAIMED_DISPLAYNAME_KEY,
+          normalizedCandidate,
+        );
+      } catch {
+        /* ignore storage errors */
+      }
+      setDisplayNameOverride(normalizedCandidate);
+
+      console.log("🚀 ~ handleSignUp ~ user:", user);
+      console.log("🚀 ~ handleSignUp ~ auth.currentUser:", auth.currentUser);
+      if (user?.reload) await user.reload();
+      if (auth.currentUser?.getIdToken) await auth.currentUser.getIdToken(true);
+      if (auth.currentUser) await syncSessionFromUser(auth.currentUser);
+
+      try {
+        if (
+          user?.displayName &&
+          normalizeUsername(user.displayName || "") === normalizedCandidate
+        ) {
+          sessionStorage.removeItem(LAST_CLAIMED_DISPLAYNAME_KEY);
+          setDisplayNameOverride("");
+        }
+      } catch {
+        /* ignore */
+      }
+
       setIsEditingName(false);
       setNameDraft("");
       resetUsernameCheck();

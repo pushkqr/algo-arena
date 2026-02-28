@@ -6,13 +6,13 @@ import useAuthState from "../hooks/useAuthState";
 import useAuthRedirect from "../hooks/useAuthRedirect";
 import HeroShell from "../components/HeroShell";
 import { ROUTES } from "../lib/routes";
+import { toast } from "react-toastify";
 
 function SignIn() {
   const { isAuthenticated } = useAuthState();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const { navigateToNextPath } = useAuthRedirect({
     isAuthenticated,
@@ -21,22 +21,22 @@ function SignIn() {
 
   async function handleSignIn() {
     if (!auth) {
-      setError("Firebase is not configured. Add VITE_FIREBASE_* values.");
+      toast.error("Firebase is not configured. Add VITE_FIREBASE_* values.");
       return;
     }
 
     if (!email || !password) {
-      setError("Email and password are required.");
+      toast.error("Email and password are required.");
       return;
     }
 
-    setError("");
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email.trim(), password);
+      toast.success("Logged in successfully.");
       navigateToNextPath();
     } catch (authError) {
-      setError(authError?.message || "Sign in failed.");
+      toast.error(authError?.message || "Sign in failed.");
     } finally {
       setLoading(false);
     }
@@ -108,8 +108,6 @@ function SignIn() {
                 Sign up
               </Link>
             </p>
-
-            {error && <p className="auth-error">{error}</p>}
           </div>
         </div>
       </div>

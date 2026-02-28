@@ -6,8 +6,10 @@ import useUsernameAvailability, {
   normalizeUsername,
 } from "./useUsernameAvailability";
 import { usersApi } from "../api/usersApi";
+import { syncSessionFromUser } from "../lib/authSession";
 
 const PENDING_SIGNUP_USERNAME_KEY = "aa_pending_signup_username";
+const LAST_CLAIMED_DISPLAYNAME_KEY = "aa_last_claimed_displayName";
 
 export default function useSignUpFlow({ isAuthenticated, user }) {
   const [username, setUsername] = useState("");
@@ -83,6 +85,12 @@ export default function useSignUpFlow({ isAuthenticated, user }) {
     }
 
     await usersApi.updateMyUsername(candidateUsername);
+    try {
+      sessionStorage.setItem(LAST_CLAIMED_DISPLAYNAME_KEY, candidateUsername);
+    } catch {
+      /* ignore storage errors */
+    }
+
     sessionStorage.removeItem(PENDING_SIGNUP_USERNAME_KEY);
     setUsernameClaimRequired(false);
   }
@@ -135,6 +143,11 @@ export default function useSignUpFlow({ isAuthenticated, user }) {
       }
 
       await claimUsername(candidateUsername);
+
+      if (user?.reload) await user.reload();
+      if (auth.currentUser?.getIdToken) await auth.currentUser.getIdToken(true);
+      if (auth.currentUser) await syncSessionFromUser(auth.currentUser);
+
       return true;
     } catch (authError) {
       if (

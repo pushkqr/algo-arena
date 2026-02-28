@@ -2,7 +2,6 @@ import { auth } from "./firebase";
 import { clearSession, getToken, setToken } from "./authSession";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
-
 let unauthorizedHandler = null;
 
 export function setUnauthorizedHandler(handler) {
@@ -108,7 +107,7 @@ async function request(path, options = {}) {
     }
 
     throw new ApiClientError(
-      data?.message || response.statusText || "API request failed",
+      data?.error || response.statusText || "API request failed",
       {
         status: response.status,
         data,

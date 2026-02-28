@@ -16,8 +16,6 @@ function SignUp() {
     password,
     setPassword,
     loading,
-    error,
-    setError,
     usernameCheck,
     canCreateAccount,
     usernameClaimRequired,
@@ -73,7 +71,6 @@ function SignUp() {
               value={username}
               onChange={(event) => {
                 setUsername(event.target.value.toLowerCase());
-                setError("");
               }}
               placeholder="username"
               maxLength={20}
@@ -141,8 +138,7 @@ function SignUp() {
 
             {usernameClaimRequired ? (
               <p className="signin-username-hint signin-username-hint--error">
-                Your account exists, but username claim is pending. Retry to
-                complete setup.
+                Your account exists, but username claim is pending. Please wait.
               </p>
             ) : null}
 
@@ -152,8 +148,6 @@ function SignUp() {
                 Log in
               </Link>
             </p>
-
-            {error && <p className="auth-error">{error}</p>}
           </div>
         </div>
       </div>

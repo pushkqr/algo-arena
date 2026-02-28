@@ -28,33 +28,43 @@ export default function useUsernameAvailability({
     const normalizedCurrent = normalizeUsername(currentValue);
 
     if (!normalizedCandidate) {
-      setUsernameCheck({
-        status: "idle",
-        message: "Use 3-20 chars: lowercase letters, numbers, underscore.",
+      Promise.resolve().then(() => {
+        setUsernameCheck({
+          status: "idle",
+          message: "Use 3-20 chars: lowercase letters, numbers, underscore.",
+        });
       });
       return;
     }
 
     if (!USERNAME_PATTERN.test(normalizedCandidate)) {
-      setUsernameCheck({
-        status: "invalid",
-        message:
-          "Username must be 3-20 chars and only lowercase letters, numbers, underscore.",
+      Promise.resolve().then(() => {
+        setUsernameCheck({
+          status: "invalid",
+          message:
+            "Username must be 3-20 chars and only lowercase letters, numbers, underscore.",
+        });
       });
+
       return;
     }
 
     if (normalizedCandidate === normalizedCurrent) {
-      setUsernameCheck({
-        status: "current",
-        message: "This is your current username.",
+      Promise.resolve().then(() => {
+        setUsernameCheck({
+          status: "current",
+          message: "This is your current username.",
+        });
       });
+
       return;
     }
 
-    setUsernameCheck({
-      status: "checking",
-      message: "Checking availability...",
+    Promise.resolve().then(() => {
+      setUsernameCheck({
+        status: "checking",
+        message: "Checking availability...",
+      });
     });
 
     let active = true;
@@ -73,14 +83,14 @@ export default function useUsernameAvailability({
         } else {
           setUsernameCheck({ status: "taken", message: "Username is taken." });
         }
-      } catch {
+      } catch (error) {
         if (!active) {
           return;
         }
 
         setUsernameCheck({
           status: "error",
-          message: "Could not verify availability right now.",
+          message: error.message || "Could not verify availability right now.",
         });
       }
     }, 350);

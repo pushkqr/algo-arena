@@ -4,7 +4,13 @@ function ProfileSummary({
   isEditingName,
   onCompleteUsernameSetup,
 }) {
-  const hasUsername = Boolean(String(user.displayName || "").trim());
+  const hasUsername = Boolean(
+    String(
+      user.displayName ||
+        sessionStorage?.getItem("aa_last_claimed_displayName") ||
+        "",
+    ).trim(),
+  );
 
   return (
     <div className="verify-panel">
