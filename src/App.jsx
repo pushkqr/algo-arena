@@ -29,11 +29,11 @@ function App() {
 
   return (
     <div className={`app-shell${isLandingRoute ? " app-shell--landing" : ""}`}>
-      <Navbar />
-      <main
-        className={`page-wrap${isLandingRoute ? " page-wrap--landing" : ""}`}
-      >
-        <AppErrorBoundary>
+      <AppErrorBoundary>
+        <Navbar />
+        <main
+          className={`page-wrap${isLandingRoute ? " page-wrap--landing" : ""}`}
+        >
           <Suspense
             fallback={<LoadingState message="Loading page..." compact />}
           >
@@ -117,8 +117,8 @@ function App() {
               <Route path="*" element={<Navigate to={ROUTES.home} replace />} />
             </Routes>
           </Suspense>
-        </AppErrorBoundary>
-      </main>
+        </main>
+      </AppErrorBoundary>
       <ToastContainer
         position="top-right"
         autoClose={2500}
