@@ -14,7 +14,6 @@ function ProfileDetailsTable({
   onVerifyEmail,
   onCopy,
 }) {
-  console.log("🚀 ~ ProfileDetailsTable ~ user:", user);
   function getUsernameStatusClass() {
     if (usernameCheck.status === "available") {
       return "verify-ok";

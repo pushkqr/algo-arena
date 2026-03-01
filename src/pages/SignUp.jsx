@@ -1,13 +1,18 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { hasFirebaseConfig } from "../lib/firebase";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth, hasFirebaseConfig } from "../lib/firebase";
 import useAuthState from "../hooks/useAuthState";
 import useAuthRedirect from "../hooks/useAuthRedirect";
 import useSignUpFlow from "../hooks/useSignUpFlow";
 import HeroShell from "../components/HeroShell";
 import { ROUTES } from "../lib/routes";
+import { toast } from "react-toastify";
+import { ensureOAuthUsername } from "../lib/oauthUsername";
 
 function SignUp() {
   const { isAuthenticated, user } = useAuthState();
+  const [oauthLoading, setOauthLoading] = useState(false);
   const {
     username,
     setUsername,
@@ -27,7 +32,7 @@ function SignUp() {
 
   const { navigateToNextPath } = useAuthRedirect({
     isAuthenticated,
-    loading,
+    loading: loading || oauthLoading,
     blockRedirect: usernameClaimRequired,
   });
 
@@ -35,6 +40,41 @@ function SignUp() {
     const completed = await handleSignUp();
     if (completed) {
       navigateToNextPath();
+    }
+  }
+
+  async function handleGoogleSignUp() {
+    if (!auth) {
+      toast.error("Firebase is not configured. Add VITE_FIREBASE_* values.");
+      return;
+    }
+
+    setOauthLoading(true);
+    try {
+      const provider = new GoogleAuthProvider();
+      const credential = await signInWithPopup(auth, provider);
+      const signedInUser = credential?.user || auth.currentUser;
+      let claimedUsername = "";
+
+      if (signedInUser) {
+        claimedUsername = await ensureOAuthUsername(signedInUser, {
+          mode: "signup",
+        });
+      }
+
+      if (!claimedUsername) {
+        toast.error(
+          "Could not finalize a unique username yet. Please retry or set it from Profile.",
+        );
+        return;
+      }
+
+      toast.success("Account ready. Logged in successfully.");
+      navigateToNextPath();
+    } catch (authError) {
+      toast.error(authError?.message || "Google sign up failed.");
+    } finally {
+      setOauthLoading(false);
     }
   }
 
@@ -125,7 +165,12 @@ function SignUp() {
 
             <div className="auth-actions">
               <button
-                disabled={loading || !hasFirebaseConfig || !canCreateAccount}
+                disabled={
+                  loading ||
+                  oauthLoading ||
+                  !hasFirebaseConfig ||
+                  !canCreateAccount
+                }
                 onClick={handleSignUpSubmit}
               >
                 {loading
@@ -133,6 +178,13 @@ function SignUp() {
                   : usernameClaimRequired
                     ? "Complete Username Setup"
                     : "Sign Up"}
+              </button>
+              <button
+                className="secondary-btn"
+                disabled={loading || oauthLoading || !hasFirebaseConfig}
+                onClick={handleGoogleSignUp}
+              >
+                {oauthLoading ? "Please wait..." : "Sign Up with Google"}
               </button>
             </div>
 

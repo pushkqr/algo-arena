@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { toast } from "react-toastify";
 import { auth } from "../lib/firebase";
 import useUsernameAvailability, {
   USERNAME_PATTERN,
@@ -11,6 +12,12 @@ import { syncSessionFromUser } from "../lib/authSession";
 const PENDING_SIGNUP_USERNAME_KEY = "aa_pending_signup_username";
 const LAST_CLAIMED_DISPLAYNAME_KEY = "aa_last_claimed_displayName";
 
+function resolveClaimedUsername(result, fallbackUsername) {
+  const candidate =
+    result?.username || result?.displayName || result?.user?.displayName;
+  return normalizeUsername(candidate || fallbackUsername);
+}
+
 export default function useSignUpFlow({ isAuthenticated, user }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -18,6 +25,13 @@ export default function useSignUpFlow({ isAuthenticated, user }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [usernameClaimRequired, setUsernameClaimRequired] = useState(false);
+
+  const setErrorWithToast = useCallback((message) => {
+    setError(message);
+    if (message) {
+      toast.error(message);
+    }
+  }, []);
 
   const checkSignupUsernameAvailability = useCallback(
     (candidate) => usersApi.checkUsernameAvailability(candidate),
@@ -84,49 +98,82 @@ export default function useSignUpFlow({ isAuthenticated, user }) {
       throw new Error("Username is already taken.");
     }
 
-    await usersApi.updateMyUsername(candidateUsername);
+    const result = await usersApi.updateMyUsername(candidateUsername);
+    const claimedUsername = resolveClaimedUsername(result, candidateUsername);
+
     try {
-      sessionStorage.setItem(LAST_CLAIMED_DISPLAYNAME_KEY, candidateUsername);
+      sessionStorage.setItem(LAST_CLAIMED_DISPLAYNAME_KEY, claimedUsername);
     } catch {
       /* ignore storage errors */
     }
 
     sessionStorage.removeItem(PENDING_SIGNUP_USERNAME_KEY);
     setUsernameClaimRequired(false);
+
+    return claimedUsername;
+  }
+
+  async function mirrorFrontendDisplayName(claimedUsername) {
+    if (!auth?.currentUser || !claimedUsername) {
+      return;
+    }
+
+    await updateProfile(auth.currentUser, { displayName: claimedUsername });
+    if (auth.currentUser.reload) {
+      await auth.currentUser.reload();
+    }
+    if (auth.currentUser.getIdToken) {
+      await auth.currentUser.getIdToken(true);
+    }
+    await syncSessionFromUser(auth.currentUser);
+
+    if (
+      normalizeUsername(auth.currentUser.displayName || "") === claimedUsername
+    ) {
+      try {
+        sessionStorage.removeItem(LAST_CLAIMED_DISPLAYNAME_KEY);
+      } catch {
+        /* ignore storage errors */
+      }
+    }
   }
 
   async function handleSignUp() {
     if (!auth) {
-      setError("Firebase is not configured. Add VITE_FIREBASE_* values.");
+      setErrorWithToast(
+        "Firebase is not configured. Add VITE_FIREBASE_* values.",
+      );
       return;
     }
 
     if (!usernameClaimRequired && (!email || !password)) {
-      setError("Email and password are required.");
+      setErrorWithToast("Email and password are required.");
       return;
     }
 
     const candidateUsername = normalizeUsername(username);
 
     if (!candidateUsername) {
-      setError("Username is required to create an account.");
+      setErrorWithToast("Username is required to create an account.");
       return;
     }
 
     if (!USERNAME_PATTERN.test(candidateUsername)) {
-      setError(
+      setErrorWithToast(
         "Username must be 3-20 characters and use lowercase letters, numbers, or underscore.",
       );
       return;
     }
 
     if (usernameCheck.status === "checking") {
-      setError("Username availability is still being checked. Please wait.");
+      setErrorWithToast(
+        "Username availability is still being checked. Please wait.",
+      );
       return;
     }
 
     if (usernameCheck.status === "taken") {
-      setError("Username is already taken.");
+      setErrorWithToast("Username is already taken.");
       return;
     }
 
@@ -142,11 +189,15 @@ export default function useSignUpFlow({ isAuthenticated, user }) {
         sessionStorage.setItem(PENDING_SIGNUP_USERNAME_KEY, candidateUsername);
       }
 
-      await claimUsername(candidateUsername);
+      const claimedUsername = await claimUsername(candidateUsername);
 
-      if (user?.reload) await user.reload();
-      if (auth.currentUser?.getIdToken) await auth.currentUser.getIdToken(true);
-      if (auth.currentUser) await syncSessionFromUser(auth.currentUser);
+      try {
+        await mirrorFrontendDisplayName(claimedUsername);
+      } catch {
+        if (auth.currentUser) {
+          await syncSessionFromUser(auth.currentUser);
+        }
+      }
 
       return true;
     } catch (authError) {
@@ -157,12 +208,12 @@ export default function useSignUpFlow({ isAuthenticated, user }) {
         user
       ) {
         setUsernameClaimRequired(true);
-        setError(
+        setErrorWithToast(
           authError?.message ||
             "Account created, but username setup is incomplete. Please retry.",
         );
       } else {
-        setError(authError?.message || "Sign up failed.");
+        setErrorWithToast(authError?.message || "Sign up failed.");
       }
     } finally {
       setLoading(false);

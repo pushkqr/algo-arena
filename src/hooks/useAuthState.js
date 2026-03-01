@@ -49,7 +49,7 @@ function useAuthState() {
     };
   }, []);
 
-  const sessionUser = useMemo(() => getSessionUser(), [user]);
+  const sessionUser = useMemo(() => getSessionUser(), []);
 
   return {
     user,

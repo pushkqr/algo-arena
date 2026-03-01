@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { strategiesApi } from "../api/strategiesApi";
 import { ApiClientError } from "../lib/apiClient";
 import { verifyStrategySource } from "../lib/strategyCodeVerify";
@@ -38,6 +39,13 @@ export default function useStrategyEditor(strategyId) {
   const [isActive, setIsActive] = useState(false);
   const [verifyResult, setVerifyResult] = useState(null);
 
+  const setErrorWithToast = useCallback((message) => {
+    setError(message);
+    if (message) {
+      toast.error(message);
+    }
+  }, []);
+
   const title = useMemo(
     () => (isCreateMode ? "Create Strategy" : "Edit Strategy"),
     [isCreateMode],
@@ -74,7 +82,9 @@ export default function useStrategyEditor(strategyId) {
         }
 
         if (active) {
-          setError(apiError?.message || "Failed to load strategy details.");
+          setErrorWithToast(
+            apiError?.message || "Failed to load strategy details.",
+          );
         }
       } finally {
         if (active) {
@@ -88,7 +98,7 @@ export default function useStrategyEditor(strategyId) {
     return () => {
       active = false;
     };
-  }, [isCreateMode, navigate, strategyId]);
+  }, [isCreateMode, navigate, setErrorWithToast, strategyId]);
 
   const handleSubmit = useCallback(
     async (event) => {
@@ -96,19 +106,21 @@ export default function useStrategyEditor(strategyId) {
       setError("");
 
       if (!name.trim()) {
-        setError("Strategy name is required.");
+        setErrorWithToast("Strategy name is required.");
         return;
       }
 
       if (!source.trim()) {
-        setError("Strategy source code is required.");
+        setErrorWithToast("Strategy source code is required.");
         return;
       }
 
       const verification = verifyStrategySource(source);
       setVerifyResult(verification);
       if (!verification.ok) {
-        setError("Source code verification failed. Fix errors before saving.");
+        setErrorWithToast(
+          "Source code verification failed. Fix errors before saving.",
+        );
         return;
       }
 
@@ -116,7 +128,7 @@ export default function useStrategyEditor(strategyId) {
       try {
         metadata = parseMetadata(metadataText);
       } catch {
-        setError("Metadata must be valid JSON.");
+        setErrorWithToast("Metadata must be valid JSON.");
         return;
       }
 
@@ -143,7 +155,7 @@ export default function useStrategyEditor(strategyId) {
           return;
         }
 
-        setError(apiError?.message || "Failed to save strategy.");
+        setErrorWithToast(apiError?.message || "Failed to save strategy.");
       } finally {
         setSaving(false);
       }
@@ -155,6 +167,7 @@ export default function useStrategyEditor(strategyId) {
       metadataText,
       name,
       navigate,
+      setErrorWithToast,
       source,
       strategyId,
     ],
@@ -169,8 +182,8 @@ export default function useStrategyEditor(strategyId) {
       return;
     }
 
-    setError("Source code verification found issues.");
-  }, [source]);
+    setErrorWithToast("Source code verification found issues.");
+  }, [setErrorWithToast, source]);
 
   const handleCancel = useCallback(() => {
     navigate(ROUTES.app.strategies);

@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { sendEmailVerification } from "firebase/auth";
+import { sendEmailVerification, updateProfile } from "firebase/auth";
 import { toast } from "react-toastify";
 import { usersApi } from "../api/usersApi";
 import { auth } from "../lib/firebase";
@@ -38,7 +38,7 @@ function toRows({ user, sessionUser, displayNameOverride }) {
     },
     {
       label: "Display Name",
-      value: displayNameOverride || user?.displayName || "-",
+      value: user?.displayName || displayNameOverride || "-",
       copyable: false,
     },
     {
@@ -57,6 +57,12 @@ function toRows({ user, sessionUser, displayNameOverride }) {
       copyable: false,
     },
   ];
+}
+
+function resolveClaimedUsername(result, fallbackUsername) {
+  const candidate =
+    result?.username || result?.displayName || result?.user?.displayName;
+  return normalizeUsername(candidate || fallbackUsername);
 }
 
 export default function useProfileState({ user, sessionUser }) {
@@ -148,27 +154,40 @@ export default function useProfileState({ user, sessionUser }) {
       }
 
       const result = await usersApi.updateMyUsername(normalizedCandidate);
+      const claimedUsername = resolveClaimedUsername(
+        result,
+        normalizedCandidate,
+      );
 
       try {
-        sessionStorage.setItem(
-          LAST_CLAIMED_DISPLAYNAME_KEY,
-          normalizedCandidate,
-        );
+        sessionStorage.setItem(LAST_CLAIMED_DISPLAYNAME_KEY, claimedUsername);
       } catch {
         /* ignore storage errors */
       }
-      setDisplayNameOverride(normalizedCandidate);
+      setDisplayNameOverride(claimedUsername);
 
-      console.log("🚀 ~ handleSignUp ~ user:", user);
-      console.log("🚀 ~ handleSignUp ~ auth.currentUser:", auth.currentUser);
-      if (user?.reload) await user.reload();
-      if (auth.currentUser?.getIdToken) await auth.currentUser.getIdToken(true);
-      if (auth.currentUser) await syncSessionFromUser(auth.currentUser);
+      if (auth?.currentUser) {
+        try {
+          await updateProfile(auth.currentUser, {
+            displayName: claimedUsername,
+          });
+          if (auth.currentUser.reload) {
+            await auth.currentUser.reload();
+          }
+        } catch {
+          /* backend claim is authoritative; keep local fallback if auth profile sync lags */
+        }
+
+        if (auth.currentUser?.getIdToken) {
+          await auth.currentUser.getIdToken(true);
+        }
+        await syncSessionFromUser(auth.currentUser);
+      }
 
       try {
         if (
           user?.displayName &&
-          normalizeUsername(user.displayName || "") === normalizedCandidate
+          normalizeUsername(user.displayName || "") === claimedUsername
         ) {
           sessionStorage.removeItem(LAST_CLAIMED_DISPLAYNAME_KEY);
           setDisplayNameOverride("");
