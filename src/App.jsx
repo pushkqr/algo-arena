@@ -8,19 +8,31 @@ import AppErrorBoundary from "./components/AppErrorBoundary";
 import RequireAuth from "./components/RequireAuth";
 import RequireServiceUser from "./components/RequireServiceUser";
 import { ROUTES } from "./lib/routes";
+import Landing from "./pages/Landing";
 
-const Landing = lazy(() => import("./pages/Landing"));
-const About = lazy(() => import("./pages/About"));
-const Tech = lazy(() => import("./pages/Tech"));
-const SignIn = lazy(() => import("./pages/SignIn"));
-const SignUp = lazy(() => import("./pages/SignUp"));
-const Strategies = lazy(() => import("./pages/Strategies"));
-const StrategyEditor = lazy(() => import("./pages/StrategyEditor"));
-const MyResults = lazy(() => import("./pages/MyResults"));
-const ResultsDetail = lazy(() => import("./pages/ResultsDetail"));
-const Leaderboard = lazy(() => import("./pages/Leaderboard"));
-const Profile = lazy(() => import("./pages/Profile"));
-const ServiceEvaluation = lazy(() => import("./pages/ServiceEvaluation"));
+const loadAbout = () => import("./pages/About");
+const loadTech = () => import("./pages/Tech");
+const loadSignIn = () => import("./pages/SignIn");
+const loadSignUp = () => import("./pages/SignUp");
+const loadStrategies = () => import("./pages/Strategies");
+const loadStrategyEditor = () => import("./pages/StrategyEditor");
+const loadMyResults = () => import("./pages/MyResults");
+const loadResultsDetail = () => import("./pages/ResultsDetail");
+const loadLeaderboard = () => import("./pages/Leaderboard");
+const loadProfile = () => import("./pages/Profile");
+const loadServiceEvaluation = () => import("./pages/ServiceEvaluation");
+
+const About = lazy(loadAbout);
+const Tech = lazy(loadTech);
+const SignIn = lazy(loadSignIn);
+const SignUp = lazy(loadSignUp);
+const Strategies = lazy(loadStrategies);
+const StrategyEditor = lazy(loadStrategyEditor);
+const MyResults = lazy(loadMyResults);
+const ResultsDetail = lazy(loadResultsDetail);
+const Leaderboard = lazy(loadLeaderboard);
+const Profile = lazy(loadProfile);
+const ServiceEvaluation = lazy(loadServiceEvaluation);
 
 function DelayedRouteFallback({ delayMs = 180 }) {
   const [visible, setVisible] = useState(false);
@@ -48,6 +60,65 @@ function DelayedRouteFallback({ delayMs = 180 }) {
 }
 
 function App() {
+  useEffect(() => {
+    let cancelled = false;
+
+    const prefetchPublicRoutes = [
+      loadAbout,
+      loadTech,
+      loadSignIn,
+      loadSignUp,
+      loadLeaderboard,
+    ];
+
+    const prefetchAppRoutes = [
+      loadStrategies,
+      loadStrategyEditor,
+      loadMyResults,
+      loadResultsDetail,
+      loadProfile,
+      loadServiceEvaluation,
+    ];
+
+    const safeRun = (loaders) => {
+      if (cancelled) {
+        return;
+      }
+
+      loaders.forEach((load) => {
+        load().catch(() => {});
+      });
+    };
+
+    const runPrefetch = () => {
+      safeRun(prefetchPublicRoutes);
+      window.setTimeout(() => safeRun(prefetchAppRoutes), 1100);
+    };
+
+    let idleCallbackId;
+    let timeoutId;
+
+    if ("requestIdleCallback" in window) {
+      idleCallbackId = window.requestIdleCallback(runPrefetch, {
+        timeout: 1400,
+      });
+    } else {
+      timeoutId = window.setTimeout(runPrefetch, 350);
+    }
+
+    return () => {
+      cancelled = true;
+
+      if (idleCallbackId && "cancelIdleCallback" in window) {
+        window.cancelIdleCallback(idleCallbackId);
+      }
+
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
+    };
+  }, []);
+
   return (
     <div className="app-shell">
       <AppErrorBoundary>
