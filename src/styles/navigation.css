@@ -1,26 +1,22 @@
 .top-nav {
+  position: fixed;
+  top: 0.55rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem 1.25rem;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
-  background: var(--bg-surface-3);
-  backdrop-filter: blur(12px);
-  box-shadow: var(--shadow-soft);
-}
-
-.app-shell--landing .top-nav {
-  background: rgba(2, 6, 23, 0.45);
-  border-bottom-color: rgba(56, 189, 248, 0.14);
-  box-shadow: 0 8px 20px rgba(2, 6, 23, 0.28);
-}
-
-.app-shell:not(.app-shell--landing) .top-nav {
-  background: var(--bg-surface-strong);
-  border-bottom-color: var(--panel-border);
-  box-shadow: 0 12px 28px rgba(2, 6, 23, 0.5);
+  width: min(1120px, calc(100% - 2.5rem));
+  margin: 0;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  background: rgba(2, 6, 23, 0.6);
+  box-shadow: 0 12px 28px rgba(2, 6, 23, 0.32);
+  backdrop-filter: blur(14px);
 }
 
 .brand {
@@ -43,8 +39,12 @@
 .brand-logo {
   width: 3rem;
   height: 3rem;
+  display: block;
+  box-sizing: border-box;
+  padding: 0.18rem;
   object-fit: contain;
-  border-radius: 0.35rem;
+  border-radius: 999px;
+  background: rgba(248, 250, 252, 0.94);
 }
 
 .nav-list {

@@ -11,8 +11,7 @@
   color: var(--text-primary);
 }
 
-.page-wrap,
-.page-wrap--landing {
+.page-wrap {
   max-width: none;
   margin: 0;
   padding: 0;
@@ -24,7 +23,7 @@
   width: 100%;
   margin: 0;
   min-height: calc(100vh - 84px);
-  padding: clamp(1.2rem, 3vw, 2rem) 0 clamp(2rem, 4vw, 2.8rem);
+  padding: clamp(8rem, 11vw, 9.2rem) 0 clamp(2rem, 4vw, 2.8rem);
   background:
     radial-gradient(
       circle at 14% 12%,
@@ -129,4 +128,46 @@
 
 .feature-list li + li {
   margin-top: 0.45rem;
+}
+
+.route-loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  background:
+    radial-gradient(
+      circle at 12% 8%,
+      var(--bg-surface) 0%,
+      var(--bg-base) 48%,
+      var(--bg-base) 100%
+    ),
+    var(--bg-base);
+}
+
+.route-loading-spinner {
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  border: 3px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  border-top-color: var(--accent-cyan-soft);
+  animation: route-loading-spin 700ms linear infinite;
+}
+
+.route-loading-text {
+  margin: 0;
+  color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+@keyframes route-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

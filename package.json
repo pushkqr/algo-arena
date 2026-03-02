@@ -13,9 +13,10 @@
     "@monaco-editor/react": "^4.7.0",
     "acorn": "^8.15.0",
     "firebase": "^12.9.0",
+    "gsap": "^3.14.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^7.13.0",
+    "react-router-dom": "^6.30.3",
     "react-toastify": "^11.0.5"
   },
   "devDependencies": {

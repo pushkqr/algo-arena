@@ -6,6 +6,8 @@ function StateBlock({
   onAction,
   compact = false,
 }) {
+  const showSpinner = tone === "loading";
+
   const classes = [
     "state-block",
     tone !== "default" ? `state-${tone}` : "",
@@ -16,7 +18,14 @@ function StateBlock({
 
   return (
     <section className={classes} role="status" aria-live="polite">
-      {title ? <h2 className="state-title">{title}</h2> : null}
+      {title ? (
+        <div className="state-title-wrap">
+          {showSpinner ? (
+            <span className="state-spinner" aria-hidden="true" />
+          ) : null}
+          <h2 className="state-title">{title}</h2>
+        </div>
+      ) : null}
       {message ? <p className="state-message">{message}</p> : null}
       {actionLabel && typeof onAction === "function" ? (
         <button className="secondary-btn" type="button" onClick={onAction}>
@@ -28,7 +37,14 @@ function StateBlock({
 }
 
 function LoadingState({ message = "Loading...", compact = false }) {
-  return <StateBlock title="Loading" message={message} compact={compact} />;
+  return (
+    <StateBlock
+      tone="loading"
+      title="Loading"
+      message={message}
+      compact={compact}
+    />
+  );
 }
 
 function EmptyState({

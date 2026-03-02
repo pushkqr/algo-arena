@@ -1,11 +1,10 @@
-import { Suspense, lazy } from "react";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Suspense, lazy, useEffect, useState } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import AppErrorBoundary from "./components/AppErrorBoundary";
-import { LoadingState } from "./components/AsyncState";
 import RequireAuth from "./components/RequireAuth";
 import RequireServiceUser from "./components/RequireServiceUser";
 import { ROUTES } from "./lib/routes";
@@ -23,20 +22,38 @@ const Leaderboard = lazy(() => import("./pages/Leaderboard"));
 const Profile = lazy(() => import("./pages/Profile"));
 const ServiceEvaluation = lazy(() => import("./pages/ServiceEvaluation"));
 
-function App() {
-  const location = useLocation();
-  const isLandingRoute = location.pathname === ROUTES.home;
+function DelayedRouteFallback({ delayMs = 180 }) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setVisible(true);
+    }, delayMs);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [delayMs]);
+
+  if (!visible) {
+    return null;
+  }
 
   return (
-    <div className={`app-shell${isLandingRoute ? " app-shell--landing" : ""}`}>
+    <div className="route-loading-screen" role="status" aria-live="polite">
+      <span className="route-loading-spinner" aria-hidden="true" />
+      <p className="route-loading-text">Loading...</p>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div className="app-shell">
       <AppErrorBoundary>
         <Navbar />
-        <main
-          className={`page-wrap${isLandingRoute ? " page-wrap--landing" : ""}`}
-        >
-          <Suspense
-            fallback={<LoadingState message="Loading page..." compact />}
-          >
+        <main className="page-wrap">
+          <Suspense fallback={<DelayedRouteFallback />}>
             <Routes>
               <Route path={ROUTES.home} element={<Landing />} />
               <Route path={ROUTES.about} element={<About />} />

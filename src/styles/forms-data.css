@@ -422,6 +422,21 @@
   font-size: 1rem;
 }
 
+.state-title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.state-spinner {
+  width: 0.95rem;
+  height: 0.95rem;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  border-top-color: var(--accent-cyan-soft);
+  animation: state-spin 700ms linear infinite;
+}
+
 .state-message {
   margin: 0;
   color: var(--text-muted);
@@ -431,6 +446,11 @@
   border-color: color-mix(in srgb, var(--accent) 30%, transparent);
 }
 
+.state-loading {
+  border-color: color-mix(in srgb, var(--accent) 36%, transparent);
+  background: color-mix(in srgb, var(--bg-surface) 62%, transparent);
+}
+
 .state-error {
   border-color: color-mix(in srgb, var(--danger) 48%, transparent);
 }
@@ -438,4 +458,10 @@
 .state-error .state-title,
 .state-error .state-message {
   color: var(--danger);
+}
+
+@keyframes state-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

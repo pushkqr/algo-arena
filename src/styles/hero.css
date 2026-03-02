@@ -3,7 +3,7 @@
   isolation: isolate;
   width: 100%;
   margin: 0;
-  min-height: calc(100vh - 84px);
+  min-height: 100vh;
   display: flex;
   align-items: stretch;
   padding: 0;
@@ -12,11 +12,12 @@
 .about-shell,
 .tech-shell,
 .signin-shell {
-  min-height: calc(100vh - 84px);
+  min-height: 100vh;
 }
 
 .landing-bg {
   position: absolute;
+  min-height: calc(100vh - 84px);
   inset: 0;
   z-index: 0;
   overflow: hidden;
@@ -48,22 +49,22 @@
   width: min(1120px, calc(100% - 2.5rem));
   margin: 0 auto;
   display: grid;
-  align-content: center;
+  align-content: start;
   gap: 1rem;
-  padding: clamp(2.4rem, 6vw, 5.4rem) 0;
+  padding: clamp(8rem, 11vw, 9.2rem) 0 clamp(2.4rem, 5vw, 4.4rem);
 }
 
 .about-content,
 .tech-content {
   align-content: start;
   gap: 1.1rem;
-  padding: clamp(2rem, 5vw, 4rem) 0 clamp(2.4rem, 5vw, 4.4rem);
+  padding: clamp(8rem, 11vw, 9.2rem) 0 clamp(2.4rem, 5vw, 4.4rem);
 }
 
 .signin-content {
   align-content: start;
   gap: 1rem;
-  padding: clamp(2rem, 5vw, 4rem) 0 clamp(2.4rem, 5vw, 4.4rem);
+  padding: clamp(8rem, 11vw, 9.2rem) 0 clamp(2.4rem, 5vw, 4.4rem);
 }
 
 .signin-layout {
