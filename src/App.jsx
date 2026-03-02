@@ -12,6 +12,7 @@ import Landing from "./pages/Landing";
 
 const loadAbout = () => import("./pages/About");
 const loadTech = () => import("./pages/Tech");
+const loadDocs = () => import("./pages/Docs");
 const loadSignIn = () => import("./pages/SignIn");
 const loadSignUp = () => import("./pages/SignUp");
 const loadStrategies = () => import("./pages/Strategies");
@@ -24,6 +25,7 @@ const loadServiceEvaluation = () => import("./pages/ServiceEvaluation");
 
 const About = lazy(loadAbout);
 const Tech = lazy(loadTech);
+const Docs = lazy(loadDocs);
 const SignIn = lazy(loadSignIn);
 const SignUp = lazy(loadSignUp);
 const Strategies = lazy(loadStrategies);
@@ -66,6 +68,7 @@ function App() {
     const prefetchPublicRoutes = [
       loadAbout,
       loadTech,
+      loadDocs,
       loadSignIn,
       loadSignUp,
       loadLeaderboard,
@@ -129,6 +132,7 @@ function App() {
               <Route path={ROUTES.home} element={<Landing />} />
               <Route path={ROUTES.about} element={<About />} />
               <Route path={ROUTES.tech} element={<Tech />} />
+              <Route path={ROUTES.docs} element={<Docs />} />
               <Route path={ROUTES.login} element={<SignIn />} />
               <Route path={ROUTES.signup} element={<SignUp />} />
               <Route

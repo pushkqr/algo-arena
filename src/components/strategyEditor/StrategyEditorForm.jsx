@@ -1,6 +1,8 @@
 import { Suspense, lazy } from "react";
+import { Link } from "react-router-dom";
 import { LoadingState } from "../AsyncState";
 import StrategyVerifyPanel from "./StrategyVerifyPanel";
+import { ROUTES } from "../../lib/routes";
 
 const MonacoEditor = lazy(() => import("@monaco-editor/react"));
 
@@ -47,6 +49,13 @@ function StrategyEditorForm({
         </select>
 
         <label htmlFor="strategySource">Source Code</label>
+        <p className="docs-inline-hint">
+          Not sure what to put here? See the{" "}
+          <Link className="docs-inline-link" to={`${ROUTES.docs}#environments`}>
+            Environment Docs
+          </Link>
+          .
+        </p>
         <div className="code-editor-shell" id="strategySource">
           <Suspense
             fallback={<LoadingState message="Loading editor..." compact />}
@@ -76,11 +85,21 @@ function StrategyEditorForm({
           >
             Verify Code
           </button>
+          <Link className="docs-inline-link" to={`${ROUTES.docs}#verification`}>
+            Verification Guide
+          </Link>
         </div>
 
         <StrategyVerifyPanel verifyResult={verifyResult} />
 
         <label htmlFor="strategyMetadata">Metadata (JSON)</label>
+        <p className="docs-inline-hint">
+          Not sure what to put here? See the{" "}
+          <Link className="docs-inline-link" to={`${ROUTES.docs}#metadata`}>
+            Metadata Docs
+          </Link>
+          .
+        </p>
         <textarea
           id="strategyMetadata"
           className="code-input"

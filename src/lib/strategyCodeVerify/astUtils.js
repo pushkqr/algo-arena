@@ -121,6 +121,33 @@ export function getFunctionNodeFromProperty(propertyNode) {
   return null;
 }
 
+function resolveFunctionLikeNode(node, declarations) {
+  if (!node) {
+    return null;
+  }
+
+  if (
+    node.type === "FunctionDeclaration" ||
+    node.type === "FunctionExpression" ||
+    node.type === "ArrowFunctionExpression"
+  ) {
+    return node;
+  }
+
+  if (node.type === "Identifier") {
+    const resolved = declarations?.get(node.name);
+    if (
+      resolved?.type === "FunctionDeclaration" ||
+      resolved?.type === "FunctionExpression" ||
+      resolved?.type === "ArrowFunctionExpression"
+    ) {
+      return resolved;
+    }
+  }
+
+  return null;
+}
+
 export function hasReturnStatement(functionNode) {
   if (!functionNode) {
     return false;
@@ -218,7 +245,10 @@ export function getReturnedObjectExpression(functionNode) {
   return foundObject;
 }
 
-export function extractMethodsFromObjectExpression(objectExpression) {
+export function extractMethodsFromObjectExpression(
+  objectExpression,
+  declarations = new Map(),
+) {
   const methods = new Map();
 
   for (const property of objectExpression?.properties || []) {
@@ -227,7 +257,11 @@ export function extractMethodsFromObjectExpression(objectExpression) {
     }
 
     const name = extractPropertyName(property.key);
-    const functionNode = getFunctionNodeFromProperty(property);
+    let functionNode = getFunctionNodeFromProperty(property);
+
+    if (!functionNode) {
+      functionNode = resolveFunctionLikeNode(property.value, declarations);
+    }
 
     if (name && functionNode) {
       methods.set(name, functionNode);

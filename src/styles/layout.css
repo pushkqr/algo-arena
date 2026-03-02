@@ -35,41 +35,15 @@
   overflow: hidden;
 }
 
-.page-card::before {
-  content: "";
+.page-card-bg {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(
-      color-mix(in srgb, var(--accent) 9%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--accent) 9%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 22px 22px;
-  mask-image: radial-gradient(circle at center, black 36%, transparent 88%);
   z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 
-.page-card::after {
-  content: "";
-  position: absolute;
-  width: 42rem;
-  height: 42rem;
-  border-radius: 50%;
-  filter: blur(86px);
-  background: var(--accent);
-  opacity: 0.14;
-  top: -16rem;
-  right: -10rem;
-  animation: drift 14s ease-in-out infinite;
-  z-index: 0;
-}
-
-.page-card > * {
+.page-card > :not(.page-card-bg) {
   position: relative;
   z-index: 1;
   width: min(1120px, calc(100% - 2.5rem));

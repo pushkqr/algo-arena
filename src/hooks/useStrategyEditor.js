@@ -8,6 +8,31 @@ import { ROUTES } from "../lib/routes";
 
 export const DEFAULT_STRATEGY_ENV = "AuctionHouse";
 
+const STRATEGY_SOURCE_TEMPLATE = `function reset(context) {
+  // Initialize or reset your internal strategy state here.
+  // context can include environment/session bootstrap information.
+  return context;
+}
+
+function observe(observation) {
+  // Consume market/game observations and update local state if needed.
+  // Keep this side-effect free unless your strategy requires persistence.
+  return observation;
+}
+
+function act(state) {
+  // Decide and return the next action based on the latest state/observation.
+  // Return shape/value depends on the selected environment contract.
+  return null;
+}
+
+export default {
+  reset,
+  observe,
+  act,
+};
+`;
+
 function parseMetadata(value) {
   if (!value.trim()) {
     return {};
@@ -34,7 +59,9 @@ export default function useStrategyEditor(strategyId) {
 
   const [name, setName] = useState("");
   const [envName, setEnvName] = useState(DEFAULT_STRATEGY_ENV);
-  const [source, setSource] = useState("");
+  const [source, setSource] = useState(
+    isCreateMode ? STRATEGY_SOURCE_TEMPLATE : "",
+  );
   const [metadataText, setMetadataText] = useState("{}");
   const [isActive, setIsActive] = useState(false);
   const [verifyResult, setVerifyResult] = useState(null);

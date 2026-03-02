@@ -15,6 +15,7 @@ function Navbar() {
   const publicLinks = [
     { to: ROUTES.about, label: "About" },
     { to: ROUTES.tech, label: "Tech" },
+    { to: ROUTES.docs, label: "Docs" },
   ];
 
   if (!isAuthenticated) {

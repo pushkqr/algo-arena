@@ -33,7 +33,7 @@ export function analyzeContract(ast, addIssue) {
 
   if (exportNode.type === "ObjectExpression") {
     style = "object";
-    methods = extractMethodsFromObjectExpression(exportNode);
+    methods = extractMethodsFromObjectExpression(exportNode, declarations);
   } else if (
     exportNode.type === "ClassDeclaration" ||
     exportNode.type === "ClassExpression"
@@ -48,7 +48,10 @@ export function analyzeContract(ast, addIssue) {
     const returnedObject = getReturnedObjectExpression(exportNode);
     if (returnedObject) {
       style = "factory-function";
-      methods = extractMethodsFromObjectExpression(returnedObject);
+      methods = extractMethodsFromObjectExpression(
+        returnedObject,
+        declarations,
+      );
     } else {
       style = "direct-function";
       directDecisionFunction = exportNode;
