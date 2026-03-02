@@ -31,4 +31,8 @@ export const strategiesApi = {
     const payload = envName ? { isActive: true, envName } : { isActive: true };
     return apiClient.patch(`${BASE_PATH}/${strategyId}`, payload);
   },
+
+  sandboxRun(payload) {
+    return apiClient.post(`${BASE_PATH}/sandbox-run`, payload);
+  },
 };

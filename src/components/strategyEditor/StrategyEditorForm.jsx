@@ -6,6 +6,22 @@ import { ROUTES } from "../../lib/routes";
 
 const MonacoEditor = lazy(() => import("@monaco-editor/react"));
 
+function formatRunResult(value) {
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  try {
+    return JSON.stringify(value, null, 2);
+  } catch {
+    return String(value);
+  }
+}
+
 function StrategyEditorForm({
   defaultEnv,
   name,
@@ -15,7 +31,11 @@ function StrategyEditorForm({
   source,
   onSourceChange,
   onVerifyCode,
+  onRun,
+  canRun,
+  running,
   verifyResult,
+  runResult,
   metadataText,
   onMetadataTextChange,
   isActive,
@@ -85,12 +105,27 @@ function StrategyEditorForm({
           >
             Verify Code
           </button>
+          <button
+            className="secondary-btn"
+            type="button"
+            onClick={onRun}
+            disabled={!canRun || running}
+          >
+            {running ? "Running..." : "Run"}
+          </button>
           <Link className="docs-inline-link" to={`${ROUTES.docs}#verification`}>
             Verification Guide
           </Link>
         </div>
 
         <StrategyVerifyPanel verifyResult={verifyResult} />
+
+        {runResult ? (
+          <div className="verify-panel">
+            <p className="verify-ok">Last sandbox run output</p>
+            <pre className="run-output">{formatRunResult(runResult)}</pre>
+          </div>
+        ) : null}
 
         <label htmlFor="strategyMetadata">Metadata (JSON)</label>
         <p className="docs-inline-hint">

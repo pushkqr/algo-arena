@@ -55,6 +55,7 @@ export default function useStrategyEditor(strategyId) {
 
   const [loading, setLoading] = useState(!isCreateMode);
   const [saving, setSaving] = useState(false);
+  const [running, setRunning] = useState(false);
   const [error, setError] = useState("");
 
   const [name, setName] = useState("");
@@ -65,6 +66,8 @@ export default function useStrategyEditor(strategyId) {
   const [metadataText, setMetadataText] = useState("{}");
   const [isActive, setIsActive] = useState(false);
   const [verifyResult, setVerifyResult] = useState(null);
+  const [verifiedSource, setVerifiedSource] = useState("");
+  const [runResult, setRunResult] = useState(null);
 
   const setErrorWithToast = useCallback((message) => {
     setError(message);
@@ -102,6 +105,9 @@ export default function useStrategyEditor(strategyId) {
         setSource(strategy.source || "");
         setMetadataText(JSON.stringify(strategy.metadata || {}, null, 2));
         setIsActive(Boolean(strategy.isActive));
+        setVerifyResult(null);
+        setVerifiedSource("");
+        setRunResult(null);
       } catch (apiError) {
         if (apiError instanceof ApiClientError && apiError.status === 401) {
           navigate(ROUTES.login, { replace: true });
@@ -126,6 +132,18 @@ export default function useStrategyEditor(strategyId) {
       active = false;
     };
   }, [isCreateMode, navigate, setErrorWithToast, strategyId]);
+
+  const handleSourceChange = useCallback((value) => {
+    setSource(value);
+    setVerifyResult(null);
+    setVerifiedSource("");
+    setRunResult(null);
+  }, []);
+
+  const isRunEnabled = useMemo(
+    () => Boolean(verifyResult?.ok) && verifiedSource === source,
+    [source, verifiedSource, verifyResult],
+  );
 
   const handleSubmit = useCallback(
     async (event) => {
@@ -206,11 +224,65 @@ export default function useStrategyEditor(strategyId) {
 
     if (verification.ok) {
       setError("");
+      setVerifiedSource(source);
       return;
     }
 
+    setVerifiedSource("");
     setErrorWithToast("Source code verification found issues.");
   }, [setErrorWithToast, source]);
+
+  const handleRun = useCallback(async () => {
+    if (!isRunEnabled) {
+      setErrorWithToast(
+        "Run is available only after successful verification of the current source.",
+      );
+      return;
+    }
+
+    let metadata = {};
+    try {
+      metadata = parseMetadata(metadataText);
+    } catch {
+      setErrorWithToast("Metadata must be valid JSON.");
+      return;
+    }
+
+    setError("");
+    setRunning(true);
+    setRunResult(null);
+
+    try {
+      const response = await strategiesApi.sandboxRun({
+        envName,
+        source,
+        metadata,
+      });
+      setRunResult(
+        response === null || response === undefined
+          ? { message: "Run completed with no response body." }
+          : response,
+      );
+
+      toast.success("Sandbox run completed.");
+    } catch (apiError) {
+      if (apiError instanceof ApiClientError && apiError.status === 401) {
+        navigate(ROUTES.login, { replace: true });
+        return;
+      }
+
+      setErrorWithToast(apiError?.message || "Sandbox run failed.");
+    } finally {
+      setRunning(false);
+    }
+  }, [
+    envName,
+    isRunEnabled,
+    metadataText,
+    navigate,
+    setErrorWithToast,
+    source,
+  ]);
 
   const handleCancel = useCallback(() => {
     navigate(ROUTES.app.strategies);
@@ -220,6 +292,7 @@ export default function useStrategyEditor(strategyId) {
     isCreateMode,
     loading,
     saving,
+    running,
     error,
     title,
     name,
@@ -227,14 +300,17 @@ export default function useStrategyEditor(strategyId) {
     envName,
     setEnvName,
     source,
-    setSource,
+    setSource: handleSourceChange,
     metadataText,
     setMetadataText,
     isActive,
     setIsActive,
     verifyResult,
+    runResult,
+    isRunEnabled,
     handleSubmit,
     handleVerifyCode,
+    handleRun,
     handleCancel,
   };
 }

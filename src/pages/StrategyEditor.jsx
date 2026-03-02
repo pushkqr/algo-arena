@@ -12,6 +12,7 @@ function StrategyEditor() {
     isCreateMode,
     loading,
     saving,
+    running,
     error,
     title,
     name,
@@ -25,8 +26,11 @@ function StrategyEditor() {
     isActive,
     setIsActive,
     verifyResult,
+    runResult,
+    isRunEnabled,
     handleSubmit,
     handleVerifyCode,
+    handleRun,
     handleCancel,
   } = useStrategyEditor(strategyId);
 
@@ -47,7 +51,11 @@ function StrategyEditor() {
           source={source}
           onSourceChange={setSource}
           onVerifyCode={handleVerifyCode}
+          onRun={handleRun}
+          canRun={isRunEnabled}
+          running={running}
           verifyResult={verifyResult}
+          runResult={runResult}
           metadataText={metadataText}
           onMetadataTextChange={setMetadataText}
           isActive={isActive}

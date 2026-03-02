@@ -339,6 +339,21 @@
   font-size: 0.85rem;
 }
 
+.run-output {
+  margin: 0.45rem 0 0;
+  max-height: 320px;
+  overflow: auto;
+  border: 1px solid var(--accent-soft);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem;
+  background: var(--bg-surface-2);
+  color: var(--text-primary);
+  font-size: 0.84rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 .profile-username-alert {
   margin-top: 0.55rem;
   border: 1px solid color-mix(in srgb, var(--danger) 45%, transparent);
