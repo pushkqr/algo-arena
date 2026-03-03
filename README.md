@@ -1,4 +1,4 @@
-# Algo Arena
+git# Algo Arena
 
 Algo Arena is a strategy-evaluation platform where users submit algorithms, run environment evaluations, and compare ranked results through a leaderboard.
 
@@ -7,10 +7,13 @@ Algo Arena is a strategy-evaluation platform where users submit algorithms, run 
 The application provides:
 
 - Strategy authoring and lifecycle management per environment
+- Strategy sandbox run support for quick verify-before-save iteration
 - User-scoped evaluation results
 - Global leaderboard views for completed evaluations
 - Username management with availability checks and claim/update flow
 - Role-gated service operations for running evaluations
+- Dynamic environment catalog loading from backend meta endpoint
+- Public support/contact page for issue reporting
 
 ## Tech Stack
 
@@ -56,7 +59,9 @@ The application provides:
 
 ## Backend API Surface (Consumed by Frontend)
 
+- `GET /api/meta/environment`
 - `GET /api/strategies`
+- `POST /api/strategies/sandbox-run`
 - `POST/PATCH/DELETE /api/strategies/*`
 - `GET /api/results`
 - `GET /api/results/:evaluationId`
@@ -120,3 +125,8 @@ npm run preview
 ## Supported Environment(s)
 
 - `AuctionHouse`
+- `TicTacToe`
+
+Environment options are fetched dynamically from `GET /api/meta/environment`,
+so newly enabled environments can appear in frontend selectors without
+hardcoded UI updates.
