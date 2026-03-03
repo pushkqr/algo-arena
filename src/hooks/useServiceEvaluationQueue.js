@@ -12,15 +12,13 @@ import {
   normalizeEnvOptionsResponse,
 } from "./serviceEvaluationsUtils";
 
-export const SERVICE_ENV_OPTIONS = ["AuctionHouse"];
-
 export default function useServiceEvaluationQueue({
   loadEvaluations,
   loadEvaluationDetail,
 }) {
   const navigate = useNavigate();
 
-  const [envName, setEnvName] = useState(SERVICE_ENV_OPTIONS[0]);
+  const [envName, setEnvName] = useState("AuctionHouse");
   const [poolSizeInput, setPoolSizeInput] = useState("4");
   const [poolCountInput, setPoolCountInput] = useState("2");
   const [episodesInput, setEpisodesInput] = useState("8");

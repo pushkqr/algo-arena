@@ -1,10 +1,10 @@
+import { useEffect } from "react";
 import PageShell from "../components/PageShell";
 import { EmptyState, ErrorState, LoadingState } from "../components/AsyncState";
 import LeaderboardTable from "../components/leaderboard/LeaderboardTable";
 import LeaderboardToolbar from "../components/leaderboard/LeaderboardToolbar";
-import useLeaderboard, {
-  LEADERBOARD_ENV_OPTIONS,
-} from "../hooks/useLeaderboard";
+import useLeaderboard from "../hooks/useLeaderboard";
+import useEnvironmentCatalog from "../hooks/useEnvironmentCatalog";
 
 function Leaderboard() {
   const {
@@ -24,6 +24,23 @@ function Leaderboard() {
     handlePrevPage,
     loadLeaderboard,
   } = useLeaderboard();
+  const {
+    envOptions,
+    envNames,
+    error: envCatalogError,
+    loading: loadingEnvCatalog,
+  } = useEnvironmentCatalog();
+
+  useEffect(() => {
+    if (!envNames.length || envNames.includes(envName)) {
+      return;
+    }
+
+    setEnvName(envNames[0]);
+  }, [envName, envNames, setEnvName]);
+
+  const resolvedEnvOptions =
+    envOptions.length > 0 ? envOptions : [{ name: envName, label: envName }];
 
   const resolvedEvaluationId =
     effectiveEvaluationId || rows[0]?.evaluationId || "";
@@ -34,7 +51,7 @@ function Leaderboard() {
       subtitle="See ranked aggregate performance across strategies for an environment and evaluation."
     >
       <LeaderboardToolbar
-        envOptions={LEADERBOARD_ENV_OPTIONS}
+        envOptions={resolvedEnvOptions}
         envName={envName}
         onEnvChange={setEnvName}
         evaluationIdInput={evaluationIdInput}
@@ -42,6 +59,14 @@ function Leaderboard() {
         onLoad={loadLeaderboard}
         loading={loading}
       />
+
+      {envCatalogError ? (
+        <ErrorState
+          title="Unable to load environments"
+          message={envCatalogError}
+          compact
+        />
+      ) : null}
 
       <div className="action-row leaderboard-pager">
         <button
@@ -75,7 +100,7 @@ function Leaderboard() {
         />
       ) : null}
 
-      {loading ? (
+      {loading || loadingEnvCatalog ? (
         <LoadingState message="Loading leaderboard rows..." compact />
       ) : rows.length === 0 ? (
         <EmptyState

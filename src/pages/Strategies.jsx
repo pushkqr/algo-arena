@@ -1,12 +1,11 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { EmptyState, ErrorState, LoadingState } from "../components/AsyncState";
 import PageShell from "../components/PageShell";
 import StrategiesToolbar from "../components/strategies/StrategiesToolbar";
 import StrategiesTable from "../components/strategies/StrategiesTable";
-import useStrategies, {
-  STRATEGY_ACTIVE_FILTERS,
-  STRATEGY_ENV_OPTIONS,
-} from "../hooks/useStrategies";
+import useStrategies, { STRATEGY_ACTIVE_FILTERS } from "../hooks/useStrategies";
+import useEnvironmentCatalog from "../hooks/useEnvironmentCatalog";
 import { ROUTES } from "../lib/routes";
 
 function Strategies() {
@@ -25,6 +24,23 @@ function Strategies() {
     handleSetActive,
     handleDelete,
   } = useStrategies();
+  const {
+    envOptions,
+    envNames,
+    error: envCatalogError,
+    loading: loadingEnvCatalog,
+  } = useEnvironmentCatalog();
+
+  useEffect(() => {
+    if (!envNames.length || envNames.includes(envName)) {
+      return;
+    }
+
+    setEnvName(envNames[0]);
+  }, [envName, envNames, setEnvName]);
+
+  const resolvedEnvOptions =
+    envOptions.length > 0 ? envOptions : [{ name: envName, label: envName }];
 
   return (
     <PageShell
@@ -32,7 +48,7 @@ function Strategies() {
       subtitle="List, create, edit, delete, and set your active strategy per environment."
     >
       <StrategiesToolbar
-        envOptions={STRATEGY_ENV_OPTIONS}
+        envOptions={resolvedEnvOptions}
         envName={envName}
         onEnvChange={setEnvName}
         activeFilters={STRATEGY_ACTIVE_FILTERS}
@@ -42,6 +58,14 @@ function Strategies() {
         loading={loading}
         onNewStrategy={() => navigate(ROUTES.app.newStrategy)}
       />
+
+      {envCatalogError ? (
+        <ErrorState
+          title="Unable to load environments"
+          message={envCatalogError}
+          compact
+        />
+      ) : null}
 
       {error ? (
         <ErrorState
@@ -53,7 +77,7 @@ function Strategies() {
         />
       ) : null}
 
-      {loading ? (
+      {loading || loadingEnvCatalog ? (
         <LoadingState message="Loading strategies..." compact />
       ) : strategies.length === 0 ? (
         <EmptyState

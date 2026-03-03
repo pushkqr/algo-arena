@@ -5,7 +5,6 @@ import { ApiClientError } from "../lib/apiClient";
 import { ROUTES } from "../lib/routes";
 
 export const DEFAULT_STRATEGY_ENV = "AuctionHouse";
-export const STRATEGY_ENV_OPTIONS = ["AuctionHouse"];
 
 export const STRATEGY_ACTIVE_FILTERS = [
   { value: "all", label: "All" },

@@ -23,7 +23,7 @@ function formatRunResult(value) {
 }
 
 function StrategyEditorForm({
-  defaultEnv,
+  envOptions,
   name,
   onNameChange,
   envName,
@@ -65,7 +65,18 @@ function StrategyEditorForm({
           value={envName}
           onChange={(event) => onEnvNameChange(event.target.value)}
         >
-          <option value={defaultEnv}>{defaultEnv}</option>
+          {envOptions.map((option) => {
+            const optionValue =
+              typeof option === "string" ? option : option.name;
+            const optionLabel =
+              typeof option === "string" ? option : option.label || option.name;
+
+            return (
+              <option key={optionValue} value={optionValue}>
+                {optionLabel}
+              </option>
+            );
+          })}
         </select>
 
         <label htmlFor="strategySource">Source Code</label>

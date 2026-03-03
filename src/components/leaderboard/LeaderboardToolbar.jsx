@@ -16,11 +16,18 @@ function LeaderboardToolbar({
           value={envName}
           onChange={(event) => onEnvChange(event.target.value)}
         >
-          {envOptions.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
+          {envOptions.map((option) => {
+            const optionValue =
+              typeof option === "string" ? option : option.name;
+            const optionLabel =
+              typeof option === "string" ? option : option.label || option.name;
+
+            return (
+              <option key={optionValue} value={optionValue}>
+                {optionLabel}
+              </option>
+            );
+          })}
         </select>
       </div>
 

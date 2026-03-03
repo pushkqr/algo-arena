@@ -13,6 +13,7 @@ import Landing from "./pages/Landing";
 const loadAbout = () => import("./pages/About");
 const loadTech = () => import("./pages/Tech");
 const loadDocs = () => import("./pages/Docs");
+const loadContact = () => import("./pages/Contact");
 const loadSignIn = () => import("./pages/SignIn");
 const loadSignUp = () => import("./pages/SignUp");
 const loadStrategies = () => import("./pages/Strategies");
@@ -26,6 +27,7 @@ const loadServiceEvaluation = () => import("./pages/ServiceEvaluation");
 const About = lazy(loadAbout);
 const Tech = lazy(loadTech);
 const Docs = lazy(loadDocs);
+const Contact = lazy(loadContact);
 const SignIn = lazy(loadSignIn);
 const SignUp = lazy(loadSignUp);
 const Strategies = lazy(loadStrategies);
@@ -69,6 +71,7 @@ function App() {
       loadAbout,
       loadTech,
       loadDocs,
+      loadContact,
       loadSignIn,
       loadSignUp,
       loadLeaderboard,
@@ -133,6 +136,7 @@ function App() {
               <Route path={ROUTES.about} element={<About />} />
               <Route path={ROUTES.tech} element={<Tech />} />
               <Route path={ROUTES.docs} element={<Docs />} />
+              <Route path={ROUTES.contact} element={<Contact />} />
               <Route path={ROUTES.login} element={<SignIn />} />
               <Route path={ROUTES.signup} element={<SignUp />} />
               <Route

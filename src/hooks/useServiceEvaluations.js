@@ -1,9 +1,5 @@
 import useServiceEvaluationData from "./useServiceEvaluationData";
-import useServiceEvaluationQueue, {
-  SERVICE_ENV_OPTIONS,
-} from "./useServiceEvaluationQueue";
-
-export { SERVICE_ENV_OPTIONS };
+import useServiceEvaluationQueue from "./useServiceEvaluationQueue";
 
 export default function useServiceEvaluations() {
   const data = useServiceEvaluationData();

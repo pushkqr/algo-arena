@@ -1,10 +1,10 @@
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { LoadingState } from "../components/AsyncState";
 import PageShell from "../components/PageShell";
 import StrategyEditorForm from "../components/strategyEditor/StrategyEditorForm";
-import useStrategyEditor, {
-  DEFAULT_STRATEGY_ENV,
-} from "../hooks/useStrategyEditor";
+import useStrategyEditor from "../hooks/useStrategyEditor";
+import useEnvironmentCatalog from "../hooks/useEnvironmentCatalog";
 
 function StrategyEditor() {
   const { strategyId } = useParams();
@@ -33,6 +33,18 @@ function StrategyEditor() {
     handleRun,
     handleCancel,
   } = useStrategyEditor(strategyId);
+  const { envOptions, envNames } = useEnvironmentCatalog();
+
+  useEffect(() => {
+    if (!envNames.length || envNames.includes(envName)) {
+      return;
+    }
+
+    setEnvName(envNames[0]);
+  }, [envName, envNames, setEnvName]);
+
+  const resolvedEnvOptions =
+    envOptions.length > 0 ? envOptions : [{ name: envName, label: envName }];
 
   return (
     <PageShell
@@ -43,7 +55,7 @@ function StrategyEditor() {
         <LoadingState message="Loading strategy..." compact />
       ) : (
         <StrategyEditorForm
-          defaultEnv={DEFAULT_STRATEGY_ENV}
+          envOptions={resolvedEnvOptions}
           name={name}
           onNameChange={setName}
           envName={envName}

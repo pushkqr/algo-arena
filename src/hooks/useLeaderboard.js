@@ -7,8 +7,6 @@ import { ROUTES } from "../lib/routes";
 const DEFAULT_LIMIT = 25;
 const DEFAULT_SKIP = 0;
 
-export const LEADERBOARD_ENV_OPTIONS = ["AuctionHouse"];
-
 function normalizeLeaderboardResponse(payload) {
   if (Array.isArray(payload)) {
     return payload;
@@ -59,7 +57,7 @@ function sortByRank(rows) {
 export default function useLeaderboard() {
   const navigate = useNavigate();
 
-  const [envName, setEnvName] = useState(LEADERBOARD_ENV_OPTIONS[0]);
+  const [envName, setEnvName] = useState("AuctionHouse");
   const [evaluationIdInput, setEvaluationIdInput] = useState("");
   const [skip, setSkip] = useState(DEFAULT_SKIP);
   const [rows, setRows] = useState([]);

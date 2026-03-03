@@ -3,9 +3,8 @@ import { EmptyState, ErrorState, LoadingState } from "../components/AsyncState";
 import PageShell from "../components/PageShell";
 import ServiceEvaluationToolbar from "../components/serviceEvaluation/ServiceEvaluationToolbar";
 import ServiceEvaluationsTable from "../components/serviceEvaluation/ServiceEvaluationsTable";
-import useServiceEvaluations, {
-  SERVICE_ENV_OPTIONS,
-} from "../hooks/useServiceEvaluations";
+import useServiceEvaluations from "../hooks/useServiceEvaluations";
+import useEnvironmentCatalog from "../hooks/useEnvironmentCatalog";
 
 function formatValue(value) {
   if (value === null || value === undefined || value === "") {
@@ -52,7 +51,24 @@ function ServiceEvaluation() {
     handleInspectToggle,
     handleStartEvaluation,
   } = useServiceEvaluations();
+  const {
+    envOptions,
+    envNames,
+    error: envCatalogError,
+    loading: loadingEnvCatalog,
+  } = useEnvironmentCatalog();
   const detailSectionRef = useRef(null);
+
+  useEffect(() => {
+    if (!envNames.length || envNames.includes(envName)) {
+      return;
+    }
+
+    setEnvName(envNames[0]);
+  }, [envName, envNames, setEnvName]);
+
+  const resolvedEnvOptions =
+    envOptions.length > 0 ? envOptions : [{ name: envName, label: envName }];
 
   useEffect(() => {
     const shouldScroll =
@@ -76,7 +92,7 @@ function ServiceEvaluation() {
       subtitle="Trigger evaluation runs and monitor asynchronous execution status."
     >
       <ServiceEvaluationToolbar
-        envOptions={SERVICE_ENV_OPTIONS}
+        envOptions={resolvedEnvOptions}
         envName={envName}
         onEnvNameChange={setEnvName}
         poolSizeInput={poolSizeInput}
@@ -96,6 +112,14 @@ function ServiceEvaluation() {
         loadingList={loadingList}
         onRefresh={loadEvaluations}
       />
+
+      {envCatalogError ? (
+        <ErrorState
+          title="Unable to load environments"
+          message={envCatalogError}
+          compact
+        />
+      ) : null}
 
       {envOptionsError ? (
         <ErrorState
@@ -127,7 +151,7 @@ function ServiceEvaluation() {
         />
       ) : null}
 
-      {loadingList ? (
+      {loadingList || loadingEnvCatalog ? (
         <LoadingState message="Loading evaluations..." compact />
       ) : evaluations.length === 0 ? (
         <EmptyState
