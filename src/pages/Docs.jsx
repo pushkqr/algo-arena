@@ -125,6 +125,22 @@ function Docs() {
           strategy receives, and what kind of decision it must return.
         </p>
 
+        <h3>Game Type & Evaluation Tie Behavior</h3>
+        <ul className="feature-list">
+          <li>
+            <strong>AuctionHouse:</strong> generally{" "}
+            <strong>non-zero-sum</strong>. Multiple strategies can perform well
+            at the same time, but exact same aggregate evaluation values are
+            typically uncommon because outcomes depend on bid dynamics, budget
+            usage, and round variance.
+          </li>
+          <li>
+            <strong>TicTacToe:</strong> effectively a <strong>zero-sum</strong>
+            &nbsp; head-to-head game. Symmetry and bounded outcomes make equal
+            or very close evaluations more common across strong strategies.
+          </li>
+        </ul>
+
         <details id="environment-auctionhouse" className="docs-env-details">
           <summary className="docs-env-summary">AuctionHouse</summary>
           <div className="docs-env-content">
@@ -156,6 +172,9 @@ function Docs() {
 
             <h3>Contract</h3>
             <ul className="feature-list">
+              <li>
+                <strong>Game type:</strong> non-zero-sum repeated auction.
+              </li>
               <li>
                 <strong>Expected output:</strong> <code>act(...)</code> returns
                 a number (bid).
@@ -364,6 +383,9 @@ function Docs() {
 
             <h3>Contract</h3>
             <ul className="feature-list">
+              <li>
+                <strong>Game type:</strong> zero-sum, turn-based board game.
+              </li>
               <li>
                 <strong>Expected output:</strong> <code>act(...)</code> returns
                 a numeric move index (0-8).
