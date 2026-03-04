@@ -28,6 +28,7 @@ function StrategyEditor() {
     verifyResult,
     runResult,
     isRunEnabled,
+    isSubmitEnabled,
     handleSubmit,
     handleVerifyCode,
     handleRun,
@@ -65,6 +66,7 @@ function StrategyEditor() {
           onVerifyCode={handleVerifyCode}
           onRun={handleRun}
           canRun={isRunEnabled}
+          canSubmit={isSubmitEnabled}
           running={running}
           verifyResult={verifyResult}
           runResult={runResult}

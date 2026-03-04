@@ -36,6 +36,7 @@ function StrategyEditorForm({
   running,
   verifyResult,
   runResult,
+  canSubmit,
   metadataText,
   onMetadataTextChange,
   isActive,
@@ -133,7 +134,13 @@ function StrategyEditorForm({
 
         {runResult ? (
           <div className="verify-panel">
-            <p className="verify-ok">Last sandbox run output</p>
+            <p
+              className={runResult?.ok === false ? "verify-fail" : "verify-ok"}
+            >
+              {runResult?.ok === false
+                ? "Last sandbox run error"
+                : "Last sandbox run output"}
+            </p>
             <pre className="run-output">{formatRunResult(runResult)}</pre>
           </div>
         ) : null}
@@ -171,7 +178,11 @@ function StrategyEditorForm({
         <button className="secondary-btn" type="button" onClick={onCancel}>
           Cancel
         </button>
-        <button className="secondary-btn" type="submit" disabled={saving}>
+        <button
+          className="secondary-btn"
+          type="submit"
+          disabled={saving || running || !canSubmit}
+        >
           {saving
             ? "Saving..."
             : isCreateMode

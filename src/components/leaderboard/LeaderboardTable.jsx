@@ -11,7 +11,6 @@ function LeaderboardTable({ rows, evaluationId }) {
           <tr>
             <th>Rank</th>
             <th>Player</th>
-            <th>Agent</th>
             <th>Total Return</th>
             <th>Average Return</th>
             <th>Fail Rate</th>
@@ -26,7 +25,6 @@ function LeaderboardTable({ rows, evaluationId }) {
               row.username ||
               row.displayName ||
               "Unknown User";
-            const agentId = row.agentId || "-";
             const totalReturn = row.totalReturn ?? row.metrics?.totalReturn;
             const averageReturn =
               row.averageReturn ?? row.metrics?.averageReturn;
@@ -36,7 +34,6 @@ function LeaderboardTable({ rows, evaluationId }) {
               <tr key={rowKey}>
                 <td>{rank}</td>
                 <td>{username}</td>
-                <td>{agentId}</td>
                 <td>{totalReturn ?? "-"}</td>
                 <td>{averageReturn ?? "-"}</td>
                 <td>{failRate ?? "-"}</td>

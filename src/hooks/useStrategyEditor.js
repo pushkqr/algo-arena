@@ -8,19 +8,18 @@ import { ROUTES } from "../lib/routes";
 
 export const DEFAULT_STRATEGY_ENV = "AuctionHouse";
 
-const STRATEGY_SOURCE_TEMPLATE = `function reset(context) {
+const STRATEGY_SOURCE_TEMPLATE = `function reset() {
   // Initialize or reset your internal strategy state here.
-  // context can include environment/session bootstrap information.
-  return context;
+  return null;  
 }
 
-function observe(observation) {
+function observe(obs) {
   // Consume market/game observations and update local state if needed.
   // Keep this side-effect free unless your strategy requires persistence.
-  return observation;
+  return obs || {};
 }
 
-function act(state) {
+function act(obs) {
   // Decide and return the next action based on the latest state/observation.
   // Return shape/value depends on the selected environment contract.
   return null;
@@ -68,6 +67,8 @@ export default function useStrategyEditor(strategyId) {
   const [verifyResult, setVerifyResult] = useState(null);
   const [verifiedSource, setVerifiedSource] = useState("");
   const [runResult, setRunResult] = useState(null);
+  const [lastSuccessfulRunSource, setLastSuccessfulRunSource] = useState("");
+  const [lastSuccessfulRunEnv, setLastSuccessfulRunEnv] = useState("");
 
   const setErrorWithToast = useCallback((message) => {
     setError(message);
@@ -108,6 +109,8 @@ export default function useStrategyEditor(strategyId) {
         setVerifyResult(null);
         setVerifiedSource("");
         setRunResult(null);
+        setLastSuccessfulRunSource("");
+        setLastSuccessfulRunEnv("");
       } catch (apiError) {
         if (apiError instanceof ApiClientError && apiError.status === 401) {
           navigate(ROUTES.login, { replace: true });
@@ -138,11 +141,36 @@ export default function useStrategyEditor(strategyId) {
     setVerifyResult(null);
     setVerifiedSource("");
     setRunResult(null);
+    setLastSuccessfulRunSource("");
+    setLastSuccessfulRunEnv("");
+  }, []);
+
+  const handleEnvNameChange = useCallback((value) => {
+    setEnvName(value);
+    setVerifyResult(null);
+    setVerifiedSource("");
+    setRunResult(null);
+    setLastSuccessfulRunSource("");
+    setLastSuccessfulRunEnv("");
   }, []);
 
   const isRunEnabled = useMemo(
     () => Boolean(verifyResult?.ok) && verifiedSource === source,
     [source, verifiedSource, verifyResult],
+  );
+
+  const isSubmitEnabled = useMemo(
+    () =>
+      isRunEnabled &&
+      lastSuccessfulRunSource === source &&
+      lastSuccessfulRunEnv === envName,
+    [
+      envName,
+      isRunEnabled,
+      lastSuccessfulRunEnv,
+      lastSuccessfulRunSource,
+      source,
+    ],
   );
 
   const handleSubmit = useCallback(
@@ -163,8 +191,17 @@ export default function useStrategyEditor(strategyId) {
       const verification = verifyStrategySource(source);
       setVerifyResult(verification);
       if (!verification.ok) {
+        setLastSuccessfulRunSource("");
+        setLastSuccessfulRunEnv("");
         setErrorWithToast(
           "Source code verification failed. Fix errors before saving.",
+        );
+        return;
+      }
+
+      if (!isSubmitEnabled) {
+        setErrorWithToast(
+          "Run must succeed for the current verified source before saving.",
         );
         return;
       }
@@ -215,6 +252,7 @@ export default function useStrategyEditor(strategyId) {
       setErrorWithToast,
       source,
       strategyId,
+      isSubmitEnabled,
     ],
   );
 
@@ -229,6 +267,8 @@ export default function useStrategyEditor(strategyId) {
     }
 
     setVerifiedSource("");
+    setLastSuccessfulRunSource("");
+    setLastSuccessfulRunEnv("");
     setErrorWithToast("Source code verification found issues.");
   }, [setErrorWithToast, source]);
 
@@ -251,6 +291,8 @@ export default function useStrategyEditor(strategyId) {
     setError("");
     setRunning(true);
     setRunResult(null);
+    setLastSuccessfulRunSource("");
+    setLastSuccessfulRunEnv("");
 
     try {
       const response = await strategiesApi.sandboxRun({
@@ -263,6 +305,8 @@ export default function useStrategyEditor(strategyId) {
           ? { message: "Run completed with no response body." }
           : response,
       );
+      setLastSuccessfulRunSource(source);
+      setLastSuccessfulRunEnv(envName);
 
       toast.success("Sandbox run completed.");
     } catch (apiError) {
@@ -271,7 +315,20 @@ export default function useStrategyEditor(strategyId) {
         return;
       }
 
-      setErrorWithToast(apiError?.message || "Sandbox run failed.");
+      const errorCode = apiError?.data?.error || "RUN_FAILED";
+      const humanMessage =
+        apiError?.data?.message || apiError?.message || "Sandbox run failed.";
+
+      setRunResult({
+        ok: false,
+        error: errorCode,
+        message: humanMessage,
+        status: apiError?.status || null,
+        details: apiError?.data?.details ?? null,
+        data: apiError?.data ?? null,
+      });
+
+      setErrorWithToast(humanMessage);
     } finally {
       setRunning(false);
     }
@@ -298,7 +355,7 @@ export default function useStrategyEditor(strategyId) {
     name,
     setName,
     envName,
-    setEnvName,
+    setEnvName: handleEnvNameChange,
     source,
     setSource: handleSourceChange,
     metadataText,
@@ -308,6 +365,7 @@ export default function useStrategyEditor(strategyId) {
     verifyResult,
     runResult,
     isRunEnabled,
+    isSubmitEnabled,
     handleSubmit,
     handleVerifyCode,
     handleRun,
