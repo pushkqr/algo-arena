@@ -1,4 +1,4 @@
-git# Algo Arena
+## Algo Arena
 
 Algo Arena is a strategy-evaluation platform where users submit algorithms, run environment evaluations, and compare ranked results through a leaderboard.
 
