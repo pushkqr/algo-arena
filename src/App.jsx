@@ -127,14 +127,6 @@ function App() {
           <Suspense fallback={<DelayedRouteFallback />}>
             <Routes>
               <Route path={ROUTES.home} element={<Landing />} />
-              <Route
-                path={ROUTES.about}
-                element={<Navigate to={ROUTES.home} replace />}
-              />
-              <Route
-                path={ROUTES.tech}
-                element={<Navigate to={ROUTES.home} replace />}
-              />
               <Route path={ROUTES.docs} element={<Docs />} />
               <Route path={ROUTES.contact} element={<Contact />} />
               <Route path={ROUTES.login} element={<SignIn />} />

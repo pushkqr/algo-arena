@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { leaderboardApi } from "../api/leaderboardApi";
 import { ApiClientError } from "../lib/apiClient";
-import { ROUTES } from "../lib/routes";
 
 const DEFAULT_LIMIT = 25;
 const DEFAULT_SKIP = 0;
@@ -55,8 +53,6 @@ function sortByRank(rows) {
 }
 
 export default function useLeaderboard() {
-  const navigate = useNavigate();
-
   const [envName, setEnvName] = useState("AuctionHouse");
   const [evaluationIdInput, setEvaluationIdInput] = useState("");
   const [skip, setSkip] = useState(DEFAULT_SKIP);
@@ -110,7 +106,9 @@ export default function useLeaderboard() {
       setQueryMode(effectiveEvaluationId ? "evaluation" : "env");
     } catch (apiError) {
       if (apiError instanceof ApiClientError && apiError.status === 401) {
-        navigate(ROUTES.login, { replace: true });
+        setRows([]);
+        setHasNextPage(false);
+        setError("Leaderboard is unavailable right now.");
         return;
       }
 
@@ -120,7 +118,7 @@ export default function useLeaderboard() {
     } finally {
       setLoading(false);
     }
-  }, [effectiveEvaluationId, effectiveLimit, effectiveSkip, envName, navigate]);
+  }, [effectiveEvaluationId, effectiveLimit, effectiveSkip, envName]);
 
   useEffect(() => {
     setSkip(DEFAULT_SKIP);
