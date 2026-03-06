@@ -85,7 +85,7 @@
   border: 0;
   border-radius: var(--radius-sm);
   padding: 0.55rem 0.8rem;
-  background: var(--accent-strong);
+  background: var(--accent-purple);
   color: var(--text-dark-accent);
   font-weight: 600;
   cursor: pointer;
@@ -94,7 +94,12 @@
 .auth-actions button:hover:not(:disabled),
 .auth-panel > button:hover:not(:disabled) {
   box-shadow: 0 10px 22px
-    color-mix(in srgb, var(--accent-strong) 24%, transparent);
+    color-mix(in srgb, var(--accent-purple) 24%, transparent);
+}
+
+.auth-actions .secondary-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent-purple) 20%, transparent);
+  color: color-mix(in srgb, var(--text-primary) 88%, var(--accent-purple));
 }
 
 .auth-actions button:disabled,

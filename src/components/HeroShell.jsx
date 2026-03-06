@@ -1,6 +1,7 @@
 import FloatingLines from "./FloatingLines";
 
 const HERO_FLOATING_WAVES = ["top", "middle", "bottom"];
+const HERO_FLOATING_GRADIENT = ["#2f4ba2", "#6366f1", "#e947f5"];
 
 function HeroShell({ shellClassName = "", contentClassName = "", children }) {
   const shellClass = ["landing-shell", shellClassName]
@@ -15,14 +16,15 @@ function HeroShell({ shellClassName = "", contentClassName = "", children }) {
       <div className="landing-bg" aria-hidden="true">
         <FloatingLines
           enabledWaves={HERO_FLOATING_WAVES}
-          // Array - specify line count per wave; Number - same count for all waves
+          linesGradient={HERO_FLOATING_GRADIENT}
           lineCount={5}
-          // Array - specify line distance per wave; Number - same distance for all waves
           lineDistance={5}
           bendRadius={5}
           bendStrength={-0.5}
+          mixBlendMode="screen"
           parallax={true}
         />
+        <span className="landing-bg-overlay" />
       </div>
 
       <div className={contentClass}>{children}</div>

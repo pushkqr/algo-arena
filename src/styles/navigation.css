@@ -86,8 +86,8 @@
 
 .nav-more-select:hover {
   border-color: color-mix(in srgb, var(--accent) 58%, transparent);
-  background-color: color-mix(in srgb, var(--accent-strong) 14%, transparent);
-  color: #e0f2fe;
+  background-color: color-mix(in srgb, var(--accent-purple) 14%, transparent);
+  color: color-mix(in srgb, var(--text-primary) 88%, var(--accent-purple));
 }
 
 .nav-more-select:focus-visible {
@@ -119,19 +119,19 @@
 }
 
 .nav-list a:hover {
-  background: color-mix(in srgb, var(--accent-strong) 16%, transparent);
-  color: #e0f2fe;
+  background: color-mix(in srgb, var(--accent-purple) 16%, transparent);
+  color: color-mix(in srgb, var(--text-primary) 88%, var(--accent-purple));
 }
 
 .nav-list a.active {
-  background: color-mix(in srgb, var(--accent-strong) 28%, transparent);
-  color: #e0f2fe;
+  background: color-mix(in srgb, var(--accent-purple) 28%, transparent);
+  color: color-mix(in srgb, var(--text-primary) 88%, var(--accent-purple));
   border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 .link-button {
   border: 0;
-  background: var(--accent-strong);
+  background: var(--accent-purple);
   color: var(--text-dark-accent);
   border-radius: var(--radius-sm);
   padding: 0.4rem 0.65rem;

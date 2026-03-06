@@ -13,8 +13,6 @@ function Navbar() {
   const { isAuthenticated, isService } = useAuthState();
 
   const publicLinks = [
-    { to: ROUTES.about, label: "About" },
-    { to: ROUTES.tech, label: "Tech" },
     { to: ROUTES.docs, label: "Docs" },
     { to: ROUTES.contact, label: "Contact" },
   ];

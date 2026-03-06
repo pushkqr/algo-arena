@@ -10,8 +10,6 @@ import RequireServiceUser from "./components/RequireServiceUser";
 import { ROUTES } from "./lib/routes";
 import Landing from "./pages/Landing";
 
-const loadAbout = () => import("./pages/About");
-const loadTech = () => import("./pages/Tech");
 const loadDocs = () => import("./pages/Docs");
 const loadContact = () => import("./pages/Contact");
 const loadSignIn = () => import("./pages/SignIn");
@@ -24,8 +22,6 @@ const loadLeaderboard = () => import("./pages/Leaderboard");
 const loadProfile = () => import("./pages/Profile");
 const loadServiceEvaluation = () => import("./pages/ServiceEvaluation");
 
-const About = lazy(loadAbout);
-const Tech = lazy(loadTech);
 const Docs = lazy(loadDocs);
 const Contact = lazy(loadContact);
 const SignIn = lazy(loadSignIn);
@@ -68,8 +64,6 @@ function App() {
     let cancelled = false;
 
     const prefetchPublicRoutes = [
-      loadAbout,
-      loadTech,
       loadDocs,
       loadContact,
       loadSignIn,
@@ -133,8 +127,14 @@ function App() {
           <Suspense fallback={<DelayedRouteFallback />}>
             <Routes>
               <Route path={ROUTES.home} element={<Landing />} />
-              <Route path={ROUTES.about} element={<About />} />
-              <Route path={ROUTES.tech} element={<Tech />} />
+              <Route
+                path={ROUTES.about}
+                element={<Navigate to={ROUTES.home} replace />}
+              />
+              <Route
+                path={ROUTES.tech}
+                element={<Navigate to={ROUTES.home} replace />}
+              />
               <Route path={ROUTES.docs} element={<Docs />} />
               <Route path={ROUTES.contact} element={<Contact />} />
               <Route path={ROUTES.login} element={<SignIn />} />
