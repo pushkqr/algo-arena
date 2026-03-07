@@ -47,6 +47,10 @@ function StrategyEditorForm({
   saving,
   isCreateMode,
 }) {
+  const environmentDocsRoute = envName
+    ? ROUTES.docsEnvironment(envName)
+    : ROUTES.docsSection("environments");
+
   return (
     <form className="strategy-form" onSubmit={onSubmit}>
       <div className="form-grid">
@@ -83,10 +87,7 @@ function StrategyEditorForm({
         <label htmlFor="strategySource">Source Code</label>
         <p className="docs-inline-hint">
           Not sure what to put here? See the{" "}
-          <Link
-            className="docs-inline-link"
-            to={ROUTES.docsSection("environments")}
-          >
+          <Link className="docs-inline-link" to={environmentDocsRoute}>
             Environment Docs
           </Link>
           .
