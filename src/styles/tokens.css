@@ -4,25 +4,45 @@
   --bg-surface-2: rgba(15, 23, 42, 0.72);
   --bg-surface-3: rgba(2, 6, 23, 0.72);
   --bg-surface-strong: rgba(2, 6, 23, 0.84);
+  --surface-elevated: rgba(2, 6, 23, 0.58);
+  --surface-nav: rgba(2, 6, 23, 0.6);
+  --surface-control: rgba(15, 23, 42, 0.62);
+  --surface-control-strong: rgba(15, 23, 42, 0.7);
+  --surface-control-stronger: rgba(15, 23, 42, 0.82);
+  --surface-control-focus: rgba(15, 23, 42, 0.88);
+  --surface-table: rgba(2, 6, 23, 0.55);
+  --surface-sidebar: rgba(4, 10, 22, 0.88);
 
   --text-primary: #e2e8f0;
   --text-secondary: #cbd5e1;
   --text-muted: #94a3b8;
-  --text-dark-accent: #082f49;
+  --text-dark-accent: #eef2ff;
 
-  --accent: #22d3ee;
-  --accent-strong: #0ea5e9;
-  --accent-cyan-soft: #67e8f9;
+  --accent: #a78bfa;
+  --accent-strong: #8b5cf6;
+  --accent-highlight-soft: #c4b5fd;
   --accent-purple: #6366f1;
-  --accent-soft: rgba(56, 189, 248, 0.24);
+  --accent-soft: rgba(139, 92, 246, 0.26);
 
   --danger: #fca5a5;
   --success: #5eead4;
 
-  --panel-bg: rgba(2, 6, 23, 0.72);
-  --panel-border: rgba(56, 189, 248, 0.3);
-  --panel-border-soft: rgba(56, 189, 248, 0.2);
-  --panel-border-strong: rgba(56, 189, 248, 0.32);
+  --panel-bg: var(--bg-surface-3);
+  --panel-border: rgba(139, 92, 246, 0.3);
+  --panel-border-soft: rgba(139, 92, 246, 0.22);
+  --panel-border-strong: rgba(139, 92, 246, 0.36);
+  --focus-border: color-mix(in srgb, var(--accent) 75%, transparent);
+  --focus-ring: var(--accent-soft);
+  --focus-border-contrast: color-mix(
+    in srgb,
+    var(--text-primary) 74%,
+    transparent
+  );
+  --focus-ring-contrast: color-mix(
+    in srgb,
+    var(--text-primary) 20%,
+    transparent
+  );
 
   --shadow-soft: 0 10px 24px rgba(2, 6, 23, 0.42);
   --shadow-strong: 0 16px 36px rgba(2, 6, 23, 0.46);

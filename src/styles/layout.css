@@ -46,18 +46,11 @@
   max-width: 70ch;
 }
 
-.grid-two {
-  margin-top: 1rem;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.9rem;
-}
-
 .info-box {
   border: 1px solid var(--accent-soft);
   border-radius: var(--radius-md);
   padding: 0.9rem;
-  background: rgba(2, 6, 23, 0.58);
+  background: var(--surface-elevated);
 }
 
 .info-box h2 {
@@ -68,11 +61,6 @@
 
 .info-box p {
   margin: 0.55rem 0 0;
-  color: var(--text-muted);
-}
-
-.body-text {
-  margin-top: 1rem;
   color: var(--text-muted);
 }
 
@@ -110,7 +98,7 @@
   height: 1.6rem;
   border-radius: 50%;
   border: 3px solid color-mix(in srgb, var(--accent) 28%, transparent);
-  border-top-color: var(--accent-cyan-soft);
+  border-top-color: var(--accent-highlight-soft);
   animation: route-loading-spin 700ms linear infinite;
 }
 

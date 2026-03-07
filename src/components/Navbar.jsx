@@ -12,13 +12,11 @@ function Navbar() {
   const [mobileMenuValue, setMobileMenuValue] = useState("");
   const { isAuthenticated, isService } = useAuthState();
 
-  const publicLinks = [];
+  const publicLinks = [{ to: ROUTES.contact, label: "Contact" }];
 
   if (!isAuthenticated) {
     publicLinks.push({ to: ROUTES.login, label: "Login" });
   }
-
-  publicLinks.push({ to: ROUTES.contact, label: "Contact" });
 
   const appLinks = [
     { to: ROUTES.app.leaderboard, label: "Leaderboard" },
@@ -77,6 +75,13 @@ function Navbar() {
               </NavLink>
             </li>
           ))}
+          {isAuthenticated && (
+            <li>
+              <button className="link-button" onClick={handleLogout}>
+                Logout
+              </button>
+            </li>
+          )}
         </ul>
       </nav>
       <nav className="nav-app desktop-only">
@@ -101,13 +106,6 @@ function Navbar() {
               </NavLink>
             </li>
           ))}
-          {isAuthenticated && (
-            <li>
-              <button className="link-button" onClick={handleLogout}>
-                Logout
-              </button>
-            </li>
-          )}
         </ul>
       </nav>
       <div className="nav-app-mobile">

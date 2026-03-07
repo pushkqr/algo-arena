@@ -53,15 +53,6 @@
     width: min(220px, 100%);
   }
 
-  .grid-two {
-    grid-template-columns: 1fr;
-  }
-
-  .glow {
-    width: 28rem;
-    height: 28rem;
-  }
-
   .page-card,
   .landing-shell,
   .signin-shell {
@@ -100,19 +91,6 @@
   .landing-content {
     padding: 11.2rem 0.15rem 1.7rem;
     gap: 0.8rem;
-  }
-
-  .landing-stats {
-    grid-template-columns: 1fr;
-  }
-
-  .stat-item {
-    border-right: 0;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.25);
-  }
-
-  .stat-item:last-child {
-    border-bottom: 0;
   }
 
   .service-eval-actions {

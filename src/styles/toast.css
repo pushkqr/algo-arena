@@ -1,0 +1,48 @@
+/* Toast Container And Body */
+.aa-toast {
+  border: 1px solid var(--panel-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface-strong);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-soft);
+}
+
+.aa-toast-body {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Progress And Close */
+.aa-toast-progress {
+  background: linear-gradient(
+    90deg,
+    var(--accent-strong) 0%,
+    var(--accent-highlight-soft) 100%
+  );
+}
+
+.Toastify__close-button {
+  color: var(--text-muted);
+  opacity: 0.85;
+}
+
+.Toastify__close-button:hover {
+  color: var(--text-secondary);
+}
+
+/* Severity Variants */
+.Toastify__toast--success {
+  border-color: color-mix(
+    in srgb,
+    var(--success) 55%,
+    var(--panel-border-strong)
+  );
+}
+
+.Toastify__toast--error {
+  border-color: color-mix(
+    in srgb,
+    var(--danger) 55%,
+    var(--panel-border-strong)
+  );
+}

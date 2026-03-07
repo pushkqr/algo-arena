@@ -13,8 +13,8 @@
   margin: 0;
   padding: 0.6rem 1rem;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
-  background: rgba(2, 6, 23, 0.6);
+  border: 1px solid color-mix(in srgb, var(--text-primary) 22%, transparent);
+  background: var(--surface-nav);
   box-shadow: 0 12px 28px rgba(2, 6, 23, 0.32);
   backdrop-filter: blur(14px);
 }
@@ -44,7 +44,7 @@
   padding: 0.18rem;
   object-fit: contain;
   border-radius: 999px;
-  background: rgba(248, 250, 252, 0.94);
+  background: color-mix(in srgb, var(--text-primary) 94%, transparent);
 }
 
 .nav-list {
@@ -68,8 +68,8 @@
 .nav-more-select {
   appearance: none;
   -webkit-appearance: none;
-  border: 1px solid color-mix(in srgb, var(--accent) 38%, transparent);
-  background: rgba(15, 23, 42, 0.62);
+  border: 1px solid color-mix(in srgb, var(--text-primary) 28%, transparent);
+  background: var(--surface-control);
   color: var(--text-primary);
   border-radius: var(--radius-sm);
   padding: 0.45rem 0.72rem;
@@ -85,22 +85,22 @@
 }
 
 .nav-more-select:hover {
-  border-color: color-mix(in srgb, var(--accent) 58%, transparent);
+  border-color: color-mix(in srgb, var(--text-primary) 54%, transparent);
   background-color: color-mix(in srgb, var(--accent-purple) 14%, transparent);
   color: color-mix(in srgb, var(--text-primary) 88%, var(--accent-purple));
 }
 
 .nav-more-select:focus-visible {
   outline: none;
-  border-color: color-mix(in srgb, var(--accent) 72%, transparent);
+  border-color: color-mix(in srgb, var(--text-primary) 72%, transparent);
   box-shadow:
-    0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent),
+    0 0 0 2px color-mix(in srgb, var(--text-primary) 24%, transparent),
     0 6px 16px rgba(2, 6, 23, 0.3);
 }
 
 .nav-more-select option {
-  background: #020617;
-  color: #e2e8f0;
+  background: var(--bg-base);
+  color: var(--text-primary);
 }
 
 .nav-list a {
@@ -125,8 +125,16 @@
 
 .nav-list a.active {
   background: color-mix(in srgb, var(--accent-purple) 28%, transparent);
-  color: color-mix(in srgb, var(--text-primary) 88%, var(--accent-purple));
-  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--text-primary);
+  border: 1px solid color-mix(in srgb, var(--text-primary) 40%, transparent);
+}
+
+.top-nav .brand:focus-visible,
+.top-nav .nav-list a:focus-visible,
+.top-nav .link-button:focus-visible {
+  outline: none;
+  border-color: var(--focus-border-contrast);
+  box-shadow: 0 0 0 3px var(--focus-ring-contrast);
 }
 
 .link-button {

@@ -2,5 +2,8 @@
 @import "./styles/layout.css";
 @import "./styles/navigation.css";
 @import "./styles/hero.css";
-@import "./styles/forms-data.css";
+@import "./styles/forms.css";
+@import "./styles/state.css";
+@import "./styles/toast.css";
+@import "./styles/docs.css";
 @import "./styles/responsive.css";

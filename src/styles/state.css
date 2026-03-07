@@ -1,0 +1,67 @@
+/* State Containers */
+.state-block {
+  margin-top: 1rem;
+  border: 1px solid var(--accent-soft);
+  border-radius: var(--radius-md);
+  background: var(--surface-elevated);
+  padding: 0.8rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.state-compact {
+  margin-top: 0.7rem;
+}
+
+.state-title {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.state-title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Loading Indicator */
+.state-spinner {
+  width: 0.95rem;
+  height: 0.95rem;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  border-top-color: var(--accent-highlight-soft);
+  animation: state-spin 700ms linear infinite;
+}
+
+.state-message {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+/* Variants */
+.state-empty {
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.state-loading {
+  border-color: color-mix(in srgb, var(--accent) 36%, transparent);
+  background: color-mix(in srgb, var(--bg-surface) 62%, transparent);
+}
+
+.state-error {
+  border-color: color-mix(in srgb, var(--danger) 48%, transparent);
+}
+
+.state-error .state-title,
+.state-error .state-message {
+  color: var(--danger);
+}
+
+/* Animation */
+@keyframes state-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
