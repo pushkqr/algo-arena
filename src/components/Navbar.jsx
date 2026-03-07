@@ -21,11 +21,11 @@ function Navbar() {
   publicLinks.push({ to: ROUTES.contact, label: "Contact" });
 
   const appLinks = [
+    { to: ROUTES.app.leaderboard, label: "Leaderboard" },
+    { to: ROUTES.docs, label: "Docs" },
     { to: ROUTES.app.strategies, label: "Strategies" },
     { to: ROUTES.app.results, label: "My Results" },
-    { to: ROUTES.app.leaderboard, label: "Leaderboard" },
     { to: ROUTES.app.profile, label: "Profile" },
-    { to: ROUTES.docs, label: "Docs" },
   ];
 
   const serviceLinks = isService

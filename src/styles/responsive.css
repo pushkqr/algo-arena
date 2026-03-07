@@ -68,7 +68,7 @@
     min-height: 100vh;
   }
 
-  .page-card > :not(.page-card-bg),
+  .page-card > *,
   .landing-content {
     width: calc(100% - 1.75rem);
   }

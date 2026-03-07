@@ -1,6 +1,8 @@
 export const ROUTES = {
   home: "/",
   docs: "/docs",
+  docsSection: (section = ":section") => `/docs/${section}`,
+  docsEnvironment: (env = ":env") => `/docs/environments/${env}`,
   contact: "/contact",
   login: "/login",
   signup: "/signup",

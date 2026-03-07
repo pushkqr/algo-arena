@@ -127,7 +127,14 @@ function App() {
           <Suspense fallback={<DelayedRouteFallback />}>
             <Routes>
               <Route path={ROUTES.home} element={<Landing />} />
-              <Route path={ROUTES.docs} element={<Docs />} />
+              <Route
+                path={ROUTES.docs}
+                element={
+                  <Navigate to={ROUTES.docsSection("algo-arena")} replace />
+                }
+              />
+              <Route path={ROUTES.docsSection()} element={<Docs />} />
+              <Route path={ROUTES.docsEnvironment()} element={<Docs />} />
               <Route path={ROUTES.contact} element={<Contact />} />
               <Route path={ROUTES.login} element={<SignIn />} />
               <Route path={ROUTES.signup} element={<SignUp />} />
@@ -176,14 +183,7 @@ function App() {
                   </RequireAuth>
                 }
               />
-              <Route
-                path={ROUTES.app.leaderboard}
-                element={
-                  <RequireAuth>
-                    <Leaderboard />
-                  </RequireAuth>
-                }
-              />
+              <Route path={ROUTES.app.leaderboard} element={<Leaderboard />} />
               <Route
                 path={ROUTES.app.profile}
                 element={

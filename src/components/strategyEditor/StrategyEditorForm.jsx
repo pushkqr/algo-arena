@@ -83,7 +83,10 @@ function StrategyEditorForm({
         <label htmlFor="strategySource">Source Code</label>
         <p className="docs-inline-hint">
           Not sure what to put here? See the{" "}
-          <Link className="docs-inline-link" to={`${ROUTES.docs}#environments`}>
+          <Link
+            className="docs-inline-link"
+            to={ROUTES.docsSection("environments")}
+          >
             Environment Docs
           </Link>
           .
@@ -125,7 +128,10 @@ function StrategyEditorForm({
           >
             {running ? "Running..." : "Run"}
           </button>
-          <Link className="docs-inline-link" to={`${ROUTES.docs}#verification`}>
+          <Link
+            className="docs-inline-link"
+            to={ROUTES.docsSection("verification")}
+          >
             Verification Guide
           </Link>
         </div>
@@ -148,7 +154,10 @@ function StrategyEditorForm({
         <label htmlFor="strategyMetadata">Metadata (JSON)</label>
         <p className="docs-inline-hint">
           Not sure what to put here? See the{" "}
-          <Link className="docs-inline-link" to={`${ROUTES.docs}#metadata`}>
+          <Link
+            className="docs-inline-link"
+            to={ROUTES.docsSection("metadata")}
+          >
             Metadata Docs
           </Link>
           .
