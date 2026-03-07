@@ -63,6 +63,18 @@
   color: var(--text-primary);
 }
 
+.auth-panel select.auth-input,
+.auth-panel textarea.auth-input {
+  width: 100%;
+}
+
+.auth-panel textarea.auth-input {
+  resize: none;
+  min-height: 7.5rem;
+  font-family: inherit;
+  line-height: 1.4;
+}
+
 .auth-input::placeholder {
   color: #64748b;
 }

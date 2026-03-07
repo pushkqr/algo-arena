@@ -12,20 +12,20 @@ function Navbar() {
   const [mobileMenuValue, setMobileMenuValue] = useState("");
   const { isAuthenticated, isService } = useAuthState();
 
-  const publicLinks = [
-    { to: ROUTES.docs, label: "Docs" },
-    { to: ROUTES.contact, label: "Contact" },
-  ];
+  const publicLinks = [];
 
   if (!isAuthenticated) {
     publicLinks.push({ to: ROUTES.login, label: "Login" });
   }
+
+  publicLinks.push({ to: ROUTES.contact, label: "Contact" });
 
   const appLinks = [
     { to: ROUTES.app.strategies, label: "Strategies" },
     { to: ROUTES.app.results, label: "My Results" },
     { to: ROUTES.app.leaderboard, label: "Leaderboard" },
     { to: ROUTES.app.profile, label: "Profile" },
+    { to: ROUTES.docs, label: "Docs" },
   ];
 
   const serviceLinks = isService
