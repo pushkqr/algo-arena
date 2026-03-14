@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../../../lib/routes";
+import DocsCodeBlock from "../../DocsCodeBlock";
 
 function AuctionHouse() {
   return (
@@ -57,7 +58,7 @@ function AuctionHouse() {
       </ul>
 
       <h3>Observation Example</h3>
-      <pre className="docs-code">{`{
+      <DocsCodeBlock label="Observation">{`{
   "round": 3,
   "myBid": 5,
   "myReward": 1.2,
@@ -68,7 +69,7 @@ function AuctionHouse() {
   "lastWinner": "agent-2",
   "lastWinningBid": 7,
   "itemHint": 6
-}`}</pre>
+}`}</DocsCodeBlock>
 
       <p>
         First turn note: <code>obs</code> may be <code>null</code>,
@@ -197,7 +198,7 @@ function AuctionHouse() {
       </ul>
 
       <h3>Reference Strategy</h3>
-      <pre className="docs-code">{`export default {
+      <DocsCodeBlock label="Reference Strategy">{`export default {
   reset(context) {
     return {
       rounds: 0,
@@ -213,7 +214,7 @@ function AuctionHouse() {
     const remainingBudget = Number(state?.lastObservation?.remainingBudget || 0);
     return Math.max(0, Math.min(remainingBudget, 5));
   }
-};`}</pre>
+};`}</DocsCodeBlock>
     </section>
   );
 }

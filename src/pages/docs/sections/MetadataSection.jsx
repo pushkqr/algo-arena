@@ -1,3 +1,5 @@
+import DocsCodeBlock from "../DocsCodeBlock";
+
 function MetadataSection() {
   return (
     <section id="metadata" className="info-box docs-section">
@@ -7,11 +9,11 @@ function MetadataSection() {
         values, tags, thresholds). It is optional but useful for organizing and
         versioning strategy behavior.
       </p>
-      <pre className="docs-code">{`{
+      <DocsCodeBlock label="metadata.json">{`{
   "tags": ["baseline", "auctionhouse"],
   "riskLimit": 0.2,
   "notes": "Conservative variant for volatile rounds"
-}`}</pre>
+}`}</DocsCodeBlock>
     </section>
   );
 }

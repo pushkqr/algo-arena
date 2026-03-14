@@ -18,4 +18,9 @@ export const DOC_NAV_GROUPS = [
   { label: "References", sections: DOC_REFERENCE_SECTIONS },
 ];
 
+export const DOC_ENVIRONMENT_LINKS = [
+  { key: "AuctionHouse", label: "AuctionHouse" },
+  { key: "TicTacToe", label: "TicTacToe" },
+];
+
 export const DEFAULT_DOC_SECTION = "algo-arena";

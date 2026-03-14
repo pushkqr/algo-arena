@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../../../lib/routes";
+import DocsCodeBlock from "../../DocsCodeBlock";
 
 function TicTacToe() {
   return (
@@ -56,7 +57,7 @@ function TicTacToe() {
       </ul>
 
       <h3>Observation Example</h3>
-      <pre className="docs-code">{`{
+      <DocsCodeBlock label="Observation">{`{
   "round": 2,
   "board": ["X", null, "O", null, null, null, null, null, null],
   "mySymbol": "X",
@@ -72,10 +73,10 @@ function TicTacToe() {
     "requestedMove": 0,
     "invalidMoveBy": null
   }
-}`}</pre>
+}`}</DocsCodeBlock>
 
       <h3>Reference Strategy</h3>
-      <pre className="docs-code">{`export default {
+      <DocsCodeBlock label="Reference Strategy">{`export default {
   reset(context) {
     return context || {};
   },
@@ -86,7 +87,7 @@ function TicTacToe() {
     const moves = Array.isArray(obs?.legalMoves) ? obs.legalMoves : [];
     return moves.length ? moves[0] : 0;
   }
-};`}</pre>
+};`}</DocsCodeBlock>
     </section>
   );
 }

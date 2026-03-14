@@ -31,15 +31,20 @@ function EnvironmentsSection() {
         pitfalls, and reference strategy snippets.
       </p>
       <div
-        className="docs-quick-nav"
+        className="docs-env-grid"
         role="navigation"
         aria-label="Environment docs links"
       >
-        <Link to={ROUTES.docsEnvironment("AuctionHouse")} className="docs-chip">
-          AuctionHouse
+        <Link
+          to={ROUTES.docsEnvironment("AuctionHouse")}
+          className="docs-env-card"
+        >
+          <h4>AuctionHouse</h4>
+          <p>Multi-strategy economy with budgeted bidding and price dynamics.</p>
         </Link>
-        <Link to={ROUTES.docsEnvironment("TicTacToe")} className="docs-chip">
-          TicTacToe
+        <Link to={ROUTES.docsEnvironment("TicTacToe")} className="docs-env-card">
+          <h4>TicTacToe</h4>
+          <p>Head-to-head zero-sum game focused on perfect play and symmetry.</p>
         </Link>
       </div>
     </section>
