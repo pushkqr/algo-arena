@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { leaderboardApi } from "../api/leaderboardApi";
 import { ApiClientError } from "../lib/apiClient";
 
-const DEFAULT_LIMIT = 25;
-const DEFAULT_SKIP = 0;
+const DEFAULT_LIMIT = 10;
 
 function normalizeLeaderboardResponse(payload) {
   if (Array.isArray(payload)) {
@@ -54,75 +53,39 @@ function sortByRank(rows) {
 
 export default function useLeaderboard() {
   const [envName, setEnvName] = useState("AuctionHouse");
-  const [evaluationIdInput, setEvaluationIdInput] = useState("");
-  const [skip, setSkip] = useState(DEFAULT_SKIP);
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [queryMode, setQueryMode] = useState("env");
-  const [hasNextPage, setHasNextPage] = useState(false);
-
-  const effectiveEvaluationId = useMemo(
-    () => evaluationIdInput.trim(),
-    [evaluationIdInput],
-  );
 
   const effectiveLimit = DEFAULT_LIMIT;
-  const effectiveSkip = skip;
-
-  const handleNextPage = useCallback(() => {
-    if (!hasNextPage) {
-      return;
-    }
-
-    setSkip((current) => current + effectiveLimit);
-  }, [effectiveLimit, hasNextPage]);
-
-  const handlePrevPage = useCallback(() => {
-    setSkip((current) => Math.max(0, current - effectiveLimit));
-  }, [effectiveLimit]);
 
   const loadLeaderboard = useCallback(async () => {
     setLoading(true);
     setError("");
 
-    const query = effectiveEvaluationId
-      ? {
-          evaluationId: effectiveEvaluationId,
-          limit: effectiveLimit,
-          skip: effectiveSkip,
-        }
-      : {
-          envName,
-          limit: effectiveLimit,
-          skip: effectiveSkip,
-        };
+    const query = {
+      envName,
+      limit: effectiveLimit,
+      skip: 0,
+    };
 
     try {
       const payload = await leaderboardApi.listEvaluations(query);
       const normalized = normalizeLeaderboardResponse(payload);
       setRows(sortByRank(normalized));
-      setHasNextPage(normalized.length >= effectiveLimit);
-      setQueryMode(effectiveEvaluationId ? "evaluation" : "env");
     } catch (apiError) {
       if (apiError instanceof ApiClientError && apiError.status === 401) {
         setRows([]);
-        setHasNextPage(false);
         setError("Leaderboard is unavailable right now.");
         return;
       }
 
       setRows([]);
-      setHasNextPage(false);
       setError(apiError?.message || "Failed to load leaderboard rows.");
     } finally {
       setLoading(false);
     }
-  }, [effectiveEvaluationId, effectiveLimit, effectiveSkip, envName]);
-
-  useEffect(() => {
-    setSkip(DEFAULT_SKIP);
-  }, [effectiveEvaluationId, envName]);
+  }, [effectiveLimit, envName]);
 
   useEffect(() => {
     loadLeaderboard();
@@ -131,18 +94,10 @@ export default function useLeaderboard() {
   return {
     envName,
     setEnvName,
-    evaluationIdInput,
-    setEvaluationIdInput,
     rows,
     loading,
     error,
-    queryMode,
-    effectiveEvaluationId,
     effectiveLimit,
-    effectiveSkip,
-    hasNextPage,
-    handleNextPage,
-    handlePrevPage,
     loadLeaderboard,
   };
 }

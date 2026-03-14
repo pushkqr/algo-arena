@@ -28,10 +28,12 @@ function Docs() {
   const mainRef = useRef(null);
   const [isMainScrollable, setIsMainScrollable] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isEnvironmentExpanded, setIsEnvironmentExpanded] =
-    useState(isEnvironmentDocs);
+  const [isEnvironmentExpandedOverride, setIsEnvironmentExpandedOverride] =
+    useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [tocItems, setTocItems] = useState([]);
+  const isEnvironmentExpanded =
+    isEnvironmentDocs || isEnvironmentExpandedOverride;
 
   useEffect(() => {
     const mainEl = mainRef.current;
@@ -56,15 +58,6 @@ function Docs() {
       window.removeEventListener("resize", updateScrollability);
     };
   }, [activeSection]);
-
-  useEffect(() => {
-    if (isEnvironmentDocs) {
-      setIsEnvironmentExpanded(true);
-      return;
-    }
-
-    setIsEnvironmentExpanded(false);
-  }, [isEnvironmentDocs, environmentName, activeSection]);
 
   useEffect(() => {
     const mainEl = mainRef.current;
@@ -244,7 +237,7 @@ function Docs() {
                             }
                             onClick={() => {
                               if (isEnvironmentSection) {
-                                setIsEnvironmentExpanded((prev) => !prev);
+                                setIsEnvironmentExpandedOverride((prev) => !prev);
                                 return;
                               }
                               closeSidebarIfMobile();

@@ -24,7 +24,7 @@ function DocsCodeBlock({ children, label }) {
     try {
       await navigator.clipboard.writeText(code);
       setCopied(true);
-    } catch (error) {
+    } catch {
       const textarea = document.createElement("textarea");
       textarea.value = code;
       textarea.setAttribute("readonly", "true");
