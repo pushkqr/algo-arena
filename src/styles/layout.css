@@ -64,6 +64,86 @@
   color: var(--text-muted);
 }
 
+.env-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.5rem;
+  margin-left: 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent-highlight);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.env-callout {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.env-callout-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.next-steps {
+  margin-top: 1.2rem;
+  border: 1px solid var(--accent-soft);
+  border-radius: var(--radius-md);
+  background: var(--surface-elevated);
+  padding: 1rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.next-steps-header h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+}
+
+.next-steps-header p {
+  margin: 0.4rem 0 0;
+  color: var(--text-muted);
+}
+
+.next-steps-actions {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.next-steps-card {
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--bg-surface) 62%, transparent);
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.next-steps-title {
+  margin: 0;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.next-steps-desc {
+  margin: 0.35rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
 .feature-list {
   margin-top: 1rem;
   padding-left: 1.2rem;

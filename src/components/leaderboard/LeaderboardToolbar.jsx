@@ -2,11 +2,13 @@ function LeaderboardToolbar({
   envOptions,
   envName,
   onEnvChange,
+  showEnvBadge,
 }) {
   return (
     <div className="toolbar-row">
       <div className="toolbar-item">
         <label htmlFor="leaderboardEnv">Environment</label>
+        {showEnvBadge ? <span className="env-badge">New</span> : null}
         <select
           id="leaderboardEnv"
           value={envName}

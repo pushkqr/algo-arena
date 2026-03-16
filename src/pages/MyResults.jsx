@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { EmptyState, ErrorState, LoadingState } from "../components/AsyncState";
+import NextStepsPanel from "../components/NextStepsPanel";
 import PageShell from "../components/PageShell";
 import MyResultsTable from "../components/results/MyResultsTable";
 import MyResultsToolbar from "../components/results/MyResultsToolbar";
@@ -56,6 +57,9 @@ function MyResults() {
       label: option.label,
     })),
   ];
+  const envDocsLink = selectedEnvName
+    ? ROUTES.docsEnvironment(selectedEnvName)
+    : ROUTES.docs;
 
   return (
     <PageShell
@@ -70,6 +74,32 @@ function MyResults() {
         onEvaluationIdChange={setEvaluationIdInput}
         onLoadResults={handleLoadResults}
         loading={loading}
+      />
+
+      <NextStepsPanel
+        subtitle="Turn recent runs into a stronger next submission."
+        actions={[
+          {
+            label: "Create a strategy",
+            description: "Refine your approach and submit a new idea.",
+            to: ROUTES.app.newStrategy,
+            cta: "New Strategy",
+          },
+          {
+            label: "Check the leaderboard",
+            description: "Benchmark your results against top performers.",
+            to: ROUTES.app.leaderboard,
+            cta: "View Leaderboard",
+          },
+          {
+            label: selectedEnvName
+              ? `Read ${selectedEnvName} docs`
+              : "Explore environment docs",
+            description: "Review scoring, inputs, and constraints.",
+            to: envDocsLink,
+            cta: "Open Docs",
+          },
+        ]}
       />
 
       {envCatalogError ? (

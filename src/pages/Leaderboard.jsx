@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PageShell from "../components/PageShell";
 import { EmptyState, ErrorState, LoadingState } from "../components/AsyncState";
 import LeaderboardTable from "../components/leaderboard/LeaderboardTable";
 import LeaderboardToolbar from "../components/leaderboard/LeaderboardToolbar";
+import NextStepsPanel from "../components/NextStepsPanel";
 import { resultsApi } from "../api/resultsApi";
 import useAuthState from "../hooks/useAuthState";
 import useLeaderboard from "../hooks/useLeaderboard";
 import useEnvironmentCatalog from "../hooks/useEnvironmentCatalog";
+import useNewEnvironments from "../hooks/useNewEnvironments";
+import { ROUTES } from "../lib/routes";
 
 function Leaderboard() {
+  const navigate = useNavigate();
   const { envName, setEnvName, rows, loading, error, loadLeaderboard } =
     useLeaderboard();
   const { isAuthenticated, user, sessionUser } = useAuthState();
@@ -22,6 +27,7 @@ function Leaderboard() {
     error: envCatalogError,
     loading: loadingEnvCatalog,
   } = useEnvironmentCatalog();
+  const { isNewEnv, markEnvSeen } = useNewEnvironments(envNames);
 
   useEffect(() => {
     if (!envNames.length || envNames.includes(envName)) {
@@ -33,6 +39,8 @@ function Leaderboard() {
 
   const resolvedEnvOptions =
     envOptions.length > 0 ? envOptions : [{ name: envName, label: envName }];
+  const showEnvBadge = isNewEnv(envName);
+  const envDocsLink = envName ? ROUTES.docsEnvironment(envName) : ROUTES.docs;
 
   const resolvedEvaluationId = rows[0]?.evaluationId || "";
 
@@ -138,6 +146,56 @@ function Leaderboard() {
         envOptions={resolvedEnvOptions}
         envName={envName}
         onEnvChange={setEnvName}
+        showEnvBadge={showEnvBadge}
+      />
+
+      {showEnvBadge ? (
+        <div className="info-box env-callout">
+          <div>
+            <h2>New environment available: {envName}</h2>
+            <p>Check the docs and see how strategies are being evaluated.</p>
+          </div>
+          <div className="env-callout-actions">
+            <button
+              className="secondary-btn"
+              type="button"
+              onClick={() => markEnvSeen(envName)}
+            >
+              Got it
+            </button>
+            <button
+              className="secondary-btn"
+              type="button"
+              onClick={() => navigate(envDocsLink)}
+            >
+              View docs
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+      <NextStepsPanel
+        subtitle="Compare performance, then iterate on your next run."
+        actions={[
+          {
+            label: "Review your results",
+            description: "See your latest runs and drill into evaluation rows.",
+            to: ROUTES.app.results,
+            cta: "My Results",
+          },
+          {
+            label: "Create a strategy",
+            description: "Ship a new idea and climb the rankings.",
+            to: ROUTES.app.newStrategy,
+            cta: "New Strategy",
+          },
+          {
+            label: `Read ${envName} docs`,
+            description: "Understand scoring, inputs, and constraints.",
+            to: envDocsLink,
+            cta: "Open Docs",
+          },
+        ]}
       />
 
       {envCatalogError ? (
