@@ -1,19 +1,31 @@
 ## Algo Arena
 
-Algo Arena is a strategy-evaluation platform where users submit algorithms, run environment evaluations, and compare ranked results through a leaderboard.
+Algo Arena is a competitive strategy evaluation platform for building, benchmarking, and ranking algorithms across dynamic environments.
 
-## Overview
+Users can author strategies, run asynchronous evaluations, inspect detailed results, and compare outcomes on a leaderboard. The platform is built around a tight technical loop: submit, evaluate, measure, refine.
 
-The application provides:
+## Core Loop
 
-- Strategy authoring and lifecycle management per environment
-- Strategy sandbox run support for quick verify-before-save iteration
-- User-scoped evaluation results
-- Global leaderboard views for completed evaluations
-- Username management with availability checks and claim/update flow
-- Role-gated service operations for running evaluations
-- Dynamic environment catalog loading from backend meta endpoint
-- Public support/contact page for issue reporting
+- `Build` strategies for a specific environment and manage their lifecycle over time.
+- `Evaluate` them through sandbox checks and asynchronous environment runs.
+- `Rank` completed outcomes on a leaderboard with environment-aware filtering.
+- `Improve` using detailed result views, repeat submissions, and clear benchmark feedback.
+
+## What You Can Do
+
+- Author and manage strategies per environment.
+- Run sandbox checks before saving or evaluating.
+- View your own evaluation results in detail.
+- Compare completed runs on a global leaderboard.
+- Operate service-side evaluation workflows with role-gated controls.
+- Discover newly enabled environments dynamically from backend metadata.
+- Manage usernames, email verification, and account identity flows.
+
+## System Overview
+
+- Frontend: React/Vite application for strategy authoring, evaluation visibility, rankings, and account workflows.
+- Backend: asynchronous evaluation service for queueing runs, storing results, ranking outcomes, and exposing environment metadata.
+- Auth: Firebase-backed identity with token-based API access for user and service workflows.
 
 ## Tech Stack
 
@@ -28,34 +40,17 @@ The application provides:
 
 ```text
 .
-├─ src/                  # Application source
-│  ├─ api/               # API clients
-│  ├─ components/        # Reusable UI components
-│  ├─ hooks/             # Feature and state hooks
-│  ├─ pages/             # Route-level pages
-│  ├─ styles/            # Global and modular styles
-│  └─ lib/               # Shared utilities and config
-├─ public/               # Static public assets
-├─ package.json          # Scripts and dependencies
-└─ README.md             # Project documentation
+|-- src/                  # Application source
+|   |-- api/              # API clients
+|   |-- components/       # Reusable UI components
+|   |-- hooks/            # Feature and state hooks
+|   |-- pages/            # Route-level pages
+|   |-- styles/           # Global and modular styles
+|   `-- lib/              # Shared utilities and config
+|-- public/               # Static public assets
+|-- package.json          # Scripts and dependencies
+`-- README.md             # Project documentation
 ```
-
-## Key Product Flows
-
-- Authentication
-  - `Log in`: email + password
-  - `Sign up`: username + email + password
-- Username lifecycle
-  - live availability check
-  - transactional username claim/update via API
-  - recovery UX for partial signup completion
-- Profile management
-  - edit username
-  - verify email
-  - identity copy actions
-- Evaluation visibility
-  - user-scoped results pages
-  - leaderboard paging and filtering by environment/evaluation
 
 ## Backend API Surface (Consumed by Frontend)
 
@@ -65,7 +60,7 @@ The application provides:
 - `POST/PATCH/DELETE /api/strategies/*`
 - `GET /api/results`
 - `GET /api/results/:evaluationId`
-- `GET /api/evaluations/*` (service-user workflows)
+- `GET /api/evaluations/*` for service-user workflows
 - `GET /api/leaderboard/evaluations`
 - `GET /api/users/username-availability`
 - `PUT /api/users/me/username`
@@ -79,7 +74,7 @@ The application provides:
 
 ## Environment Configuration
 
-Create `.env.local` (or `.env`) in repository root:
+Create `.env.local` or `.env` in the repository root:
 
 ```bash
 VITE_API_BASE_URL=http://localhost:5432
@@ -117,16 +112,16 @@ npm run preview
 
 ## Scripts
 
-- `npm run dev` — run local development server
-- `npm run build` — create production build
-- `npm run preview` — preview production build locally
-- `npm run lint` — run ESLint checks
+- `npm run dev` - run local development server
+- `npm run build` - create production build
+- `npm run preview` - preview production build locally
+- `npm run lint` - run ESLint checks
 
 ## Supported Environment(s)
 
 - `AuctionHouse`
 - `TicTacToe`
 
-Environment options are fetched dynamically from `GET /api/meta/environment`,
-so newly enabled environments can appear in frontend selectors without
-hardcoded UI updates.
+Enabled environments are fetched dynamically from `GET /api/meta/environment`,
+so newly available environments can appear in selectors and documentation flows
+without hardcoded frontend updates.
