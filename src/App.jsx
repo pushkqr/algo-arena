@@ -1,14 +1,18 @@
 import { Suspense, lazy, useEffect, useState } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import AppErrorBoundary from "./components/AppErrorBoundary";
 import RequireAuth from "./components/RequireAuth";
 import RequireServiceUser from "./components/RequireServiceUser";
+import { signOut } from "firebase/auth";
 import { ROUTES } from "./lib/routes";
 import Landing from "./pages/Landing";
+import { auth } from "./lib/firebase";
+import { clearSession } from "./lib/authSession";
+import { setUnauthorizedHandler } from "./lib/apiClient";
 
 const loadDocs = () => import("./pages/Docs");
 const loadContact = () => import("./pages/Contact");
@@ -60,6 +64,31 @@ function DelayedRouteFallback({ delayMs = 180 }) {
 }
 
 function App() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setUnauthorizedHandler(async ({ status }) => {
+      if (auth) {
+        try {
+          await signOut(auth);
+        } catch {
+          /* ignore sign-out errors */
+        }
+      }
+      clearSession();
+      toast.error(
+        status === 401
+          ? "Your session expired. Please sign in again."
+          : "You no longer have access. Please sign in again.",
+      );
+      navigate(ROUTES.login, { replace: true });
+    });
+
+    return () => {
+      setUnauthorizedHandler(null);
+    };
+  }, [navigate]);
+
   useEffect(() => {
     let cancelled = false;
 

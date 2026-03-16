@@ -2,6 +2,7 @@ function StrategiesToolbar({
   envOptions,
   envName,
   onEnvChange,
+  showEnvBadge,
   activeFilters,
   activeFilter,
   onActiveFilterChange,
@@ -13,6 +14,7 @@ function StrategiesToolbar({
     <div className="toolbar-row">
       <div className="toolbar-item">
         <label htmlFor="envName">Environment</label>
+        {showEnvBadge ? <span className="env-badge">New</span> : null}
         <select
           id="envName"
           value={envName}

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { onIdTokenChanged } from "firebase/auth";
 import { auth, hasFirebaseConfig } from "../lib/firebase";
 import {
@@ -11,6 +11,7 @@ import {
 function useAuthState() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sessionUser, setSessionUser] = useState(() => getSessionUser());
 
   useEffect(() => {
     let active = true;
@@ -20,6 +21,7 @@ function useAuthState() {
         if (!active) return;
         setUser(null);
         clearSession();
+        setSessionUser(getSessionUser());
         setLoading(false);
       });
       return () => {
@@ -39,6 +41,9 @@ function useAuthState() {
         clearSession();
       }
       if (active) {
+        setSessionUser(getSessionUser());
+      }
+      if (active) {
         setLoading(false);
       }
     });
@@ -48,8 +53,6 @@ function useAuthState() {
       unsubscribe();
     };
   }, []);
-
-  const sessionUser = useMemo(() => getSessionUser(), []);
 
   return {
     user,

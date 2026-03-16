@@ -6,11 +6,6 @@ import { ROUTES } from "../lib/routes";
 
 const RECENT_LIMIT = 25;
 
-export const RESULTS_ENV_FILTERS = [
-  { value: "all", label: "All Environments" },
-  { value: "AuctionHouse", label: "AuctionHouse" },
-];
-
 function normalizeResultsResponse(payload) {
   if (Array.isArray(payload)) {
     return payload;

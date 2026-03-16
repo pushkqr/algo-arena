@@ -43,7 +43,7 @@ function Profile() {
           compact
         />
       ) : (
-        <>
+        <div className="profile-layout">
           <ProfileSummary
             user={user}
             sessionUser={sessionUser}
@@ -67,7 +67,7 @@ function Profile() {
             onVerifyEmail={handleVerifyEmail}
             onCopy={handleCopy}
           />
-        </>
+        </div>
       )}
     </PageShell>
   );
